@@ -48,7 +48,8 @@ def sms(request):
 
 
 def get_chart_data(request):
-    csv_file_path = r"C:\Users\Swaraj\Desktop\ChrysCapital11\hive\volumetrends.csv"
+    # csv_file_path = r"C:\Users\Swaraj\Desktop\ChrysCapital11\hive\volumetrends.csv"
+    csv_file_path = r"C:\Users\Harshmeet\Desktop\mindv3\OngoingProjects\MInD\hive\volumetrends.csv"
     df = pd.read_csv(csv_file_path)
     print("CSV Columns:", df.columns.tolist())
 
@@ -63,7 +64,9 @@ def chart_view(request):
 
 
 def get_chart_data_buzz(request):
-    csv_file_path = r"C:\Users\Swaraj\Desktop\ChrysCapital\hive\dailybuzz.csv"
+    # csv_file_path = r"C:\Users\Swaraj\Desktop\ChrysCapital\hive\dailybuzz.csv"
+    csv_file_path = r"C:\Users\Harshmeet\Desktop\mindv3\OngoingProjects\MInD\dailybuzz.csv"
+
     df = pd.read_csv(csv_file_path)
     print("CSV Columns:", df.columns.tolist())
 
@@ -151,7 +154,8 @@ import numpy as np
 from django.http import JsonResponse
 
 def oneData(request):
-    filePath = r"C:\Users\Administrator\Desktop\mindv3-20250706T051847Z-1-001\mindv3\OngoingProjects\MInD\helium_data1.xlsx"
+    # filePath = r"C:\Users\Administrator\Desktop\mindv3-20250706T051847Z-1-001\mindv3\OngoingProjects\MInD\helium_data1.xlsx"
+    filePath = r"C:\Users\Harshmeet\Desktop\mindv3\OngoingProjects\MInD\helium_data1.xlsx"
     
     # Read Excel
     df = pd.read_excel(filePath)
@@ -349,7 +353,8 @@ def get_units_bucket(units):
     return f"{lower}-{upper}"
 
 def brand_sku_view(request):
-    csv_file_path = r'C:\Users\Swaraj\Desktop\OngoingProjects\MInD\static\data\brand_sku_data.csv'
+    # csv_file_path = r'C:\Users\Swaraj\Desktop\OngoingProjects\MInD\static\data\brand_sku_data.csv'
+    csv_file_path = r'C:\Users\Harshmeet\Desktop\mindv3\OngoingProjects\MInD\static\data\brand_sku_data.csv'
 
     with open(csv_file_path, newline='', encoding='ISO-8859-1') as f:
         reader = csv.DictReader(f)
