@@ -1,0 +1,294 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Health (Web Traffic) Channel-Wise</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.0/echarts.min.js"></script>
+    <style>
+        .nav-container {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            padding: 8px 12px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .nav-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .menu-container {
+            position: relative;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .menu {
+            display: none;
+            position: absolute;
+            top: 30px;
+            left: 0;
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .menu a {
+            display: block;
+            padding: 5px 10px;
+            text-decoration: none;
+            color: black;
+        }
+
+        .menu a:hover {
+            background: #f0f0f0;
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
+
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .header {
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .filter-container {
+            margin-bottom: 15px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .chart-container {
+            width: 90%;
+            height: 80vh;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+    </style>
+    <style>
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            border-radius: 8px;
+        }
+    
+        .popup-content {
+            position: relative;
+        }
+    
+        .close-btn {
+    position: fixed;
+    top: 0px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 40px;
+    font-weight: bold;
+    color: black;
+    background: none;
+    border: none;
+    outline: none;
+}
+
+.close-btn:hover {
+    color: red;
+}
+    </style>
+</head>
+<body>
+    <div class="logo" style="position: absolute; top: 20px; right: 20px;"><img src="{% static 'mlogo.png' %}" alt="Hive Logo" style="width: 160px; height: auto;"></div>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="history.back()">Back</button>
+        <button class="nav-btn" id="nextPage">Next</button>
+        <button class="nav-btn" id="insightsBtn">Insights</button>
+        <div id="insightsPopup" class="popup">
+            <div class="popup-content">
+                <span class="close-btn" onclick="closePopup()">&times;</span>
+                <p><strong>BuyWOW:</strong> BuyWOW has high visitor traffic (~150K+ monthly visitors) but declining visit duration (110s → 82s → 107s) and rising bounce rates (32% → 42%), suggesting users are dropping off faster. High reliance on direct (20%+) and organic search traffic (21-30%) implies strong brand recognition, but low engagement hints at friction in user experience or weaker product discovery.</p>  
+
+<p><strong>Minimalist:</strong> Minimalist’s traffic is largely organic-driven (25%+), showing strong brand trust. However, if paid search (19-22%) isn’t translating into engagement, the issue could be low purchase urgency or lack of conversion incentives. Simplifying decision-making through bundles or guided recommendations may help.</p>  
+
+<p><strong>Pilgrim:</strong> Pilgrim has notable social traffic (~15-25%), indicating strong influencer or content-driven pull. But if visitor retention is weak, it suggests interest isn’t converting into action. Strengthening post-click engagement through better storytelling, trials, or loyalty programs may improve conversion.</p>
+
+
+
+            </div>
+        </div>
+    
+        <div class="menu-container">
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
+            <div class="menu" id="navMenu">
+                <a href="four">Web</a>
+                <hr>
+                <a href="seven">App</a>
+                <hr>
+                <a href="a">Amazon</a>
+                <hr>
+                <a href="qcom">Q-Comm</a>
+                
+            </div>
+        </div>
+    </div>
+    <div class="header">Channel Contribution To Brand's Web Visitors</div>
+    <div class="filter-container">
+        <label for="monthSelect">Select Month:</label>
+        <select id="monthSelect"></select>
+    </div>
+    
+
+    <style>
+        .chart-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            position: relative;
+        }
+
+        #lukrative-box {
+            width: 25%;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        h3 {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+        }
+    </style>
+    <div class="chart-container">
+        <div id="chart" style="width: 100%; height: 100%;"></div>
+    </div>
+
+    <script>
+        var chart = echarts.init(document.getElementById('chart'));
+        var months = ["Oct'24", "Nov'24", "Dec'24", "Jan'24", "Feb'24"];
+        var data = {
+            'buywow': { 'Direct': [27, 28, 21, 20, 21], 'Email': [0, 4, 3, 1, 5], 'Referrals': [0, 1, 4, 2, 3], 'Social': [22, 22, 24, 25, 24], 'Organic Search': [28, 21, 23, 30, 27], 'Paid Search': [18, 21, 22, 19, 19], 'Display Ads': [5, 3, 3, 3, 1] },
+            'pilgrim': { 'Direct': [27, 21, 28, 20, 27], 'Email': [2, 3, 0, 4, 2], 'Referrals': [0, 0, 0, 0, 1], 'Social': [28, 20, 22, 23, 30], 'Organic Search': [27, 26, 27, 20, 26], 'Paid Search': [16, 29, 21, 28, 11], 'Display Ads': [0, 1, 2, 5, 3] },
+            'minimalist': { 'Direct': [27, 22, 25, 20, 22], 'Email': [1, 0, 5, 1, 1], 'Referrals': [4, 4, 5, 3, 0], 'Social': [23, 21, 23, 27, 23], 'Organic Search': [24, 25, 27, 29, 25], 'Paid Search': [19, 28, 15, 17, 28], 'Display Ads': [2, 0, 0, 3, 1] }
+        };
+        var metrics = Object.keys(data.buywow);
+        
+        function populateDropdown() {
+            let dropdown = document.getElementById('monthSelect');
+            months.forEach((month, index) => {
+                let option = document.createElement('option');
+                option.value = index;
+                option.textContent = month;
+                dropdown.appendChild(option);
+            });
+        }
+
+        function updateChart() {
+            let selectedMonthIndex = document.getElementById('monthSelect').value;
+            let series = metrics.map(metric => ({
+                name: metric,
+                type: 'bar',
+                data: Object.keys(data).map(brand => data[brand][metric][selectedMonthIndex]),
+                label: {
+                    show: true,
+                    position: 'top'
+                }
+            }));
+            
+            chart.setOption({
+                title: { text: `Traffic Split(%) for ${months[selectedMonthIndex]}`, left: 'center' },
+                tooltip: { trigger: 'axis' },
+                legend: { data: metrics, bottom: 0,textStyle: {
+        fontSize: 20
+    } },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {},
+                        restore: {},
+                        dataView: { readOnly: false },
+                        magicType: { type: ['line', 'bar'] }
+                    }
+                },
+                xAxis: { type: 'category', data: Object.keys(data) },
+                yAxis: { type: 'value' },
+                series
+            });
+        }
+
+        document.getElementById('monthSelect').addEventListener('change', updateChart);
+        populateDropdown();
+        updateChart();
+    </script>
+    <script>
+        function toggleMenu() {
+            document.getElementById("navMenu").classList.toggle("show");
+        }
+    
+        // Set the Next button's URL
+        document.getElementById("nextPage").addEventListener("click", function() {
+            window.location.href = "six"; // Change dynamically per page
+        });
+    
+        // Close menu when clicking outside
+        document.addEventListener("click", function(event) {
+            if (!event.target.closest(".menu-container")) {
+                document.getElementById("navMenu").classList.remove("show");
+            }
+        });
+    
+        // Show Insights Popup
+        document.getElementById("insightsBtn").addEventListener("click", function() {
+            document.getElementById("insightsPopup").style.display = "block";
+        });
+    
+        // Close Insights Popup
+        function closePopup() {
+            document.getElementById("insightsPopup").style.display = "none";
+        }
+    </script>
+</body>
+</html>

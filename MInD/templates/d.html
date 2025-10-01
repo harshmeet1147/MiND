@@ -1,0 +1,306 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Rank by Stage of Funnel</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; }
+        .header { text-align: center; margin: 20px; }
+        .controls { text-align: center; margin-bottom: 20px; }
+        .chart-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Distributes charts evenly */
+    gap: 5px; /* Adds spacing between charts */
+}
+
+.chart {
+    flex: 1; /* Makes charts equal width */
+    min-width: 23%; /* Ensures four charts fit in one row */
+    height: 800px; /* Adjust height as needed */
+}
+
+    </style>
+    <style>
+        .nav-container {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            padding: 8px 12px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .nav-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .menu-container {
+            position: relative;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .menu {
+            display: none;
+            position: absolute;
+            top: 30px;
+            left: 0;
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .menu a {
+            display: block;
+            padding: 5px 10px;
+            text-decoration: none;
+            color: black;
+        }
+
+        .menu a:hover {
+            background: #f0f0f0;
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo" style="position: absolute; top: 20px; right: 20px;"><img src="{% static 'mlogo.png' %}" alt="Hive Logo" style="width: 160px; height: auto;"></div>
+    <div class="header">
+        <h2>Brand Rank by Stage of Funnel</h2>
+    </div>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="history.back()">Back</button>
+        <button class="nav-btn" id="nextPage">Next</button>
+    
+        <div class="menu-container">
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
+            <div class="menu" id="navMenu">
+                <a href="four">Web</a>
+                <hr>
+                <a href="seven">App</a>
+                <hr>
+                <a href="a">Amazon</a>
+                <hr>
+                <a href="qcom">Q-Comm</a>
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <label for="category">Category:</label>
+        <select id="category">
+            <option>Water Purifier</option>
+        </select>
+        
+        <label for="year">Month:</label>
+        <select id="year">
+            <option>Jan</option>
+            <option>Feb</option>
+            <option>Mar</option>
+            <option>Apr</option>
+            <option>May</option>
+        </select>
+    </div>
+    
+    <div class="chart-container">
+        <div id="sov-index" class="chart"></div>
+        <div id="clicks-index" class="chart"></div>
+        <div id="revenue-index" class="chart"></div>
+        <div id="units-index" class="chart"></div>
+    </div>
+    
+    <script>
+        let chartInstances = {};
+        let originalData = {};
+        if (!window.brandColorMap) window.brandColorMap = {}; // Global brand color map
+    
+        function fetchCSV(url, type) {
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    const rows = data.split("\n")
+                        .map(row => row.split(",").map(cell => cell.trim()))
+                        .filter(row => row.length >= 2 && row[0] && !isNaN(row[1])); // Validate data
+    
+                    const processedData = rows.map(row => ({
+                        name: row[0],
+                        value: parseFloat(row[1]) || 0
+                    }));
+    
+                    originalData[type] = processedData;
+                    assignBrandColors(processedData);
+                    renderFunnelChart(type, processedData);
+                })
+                .catch(error => console.error("Error fetching CSV:", error));
+        }
+    
+        function assignBrandColors(data) {
+            const uniqueBrands = [...new Set(data.map(d => d.name))];
+            const totalBrands = uniqueBrands.length;
+    
+            uniqueBrands.forEach((brand, index) => {
+                if (!window.brandColorMap[brand]) {
+                    window.brandColorMap[brand] = generateColor(index, totalBrands);
+                }
+            });
+        }
+    
+        function generateColor(index, total) {
+            const goldenRatio = 0.61803398875;
+            let hue = (index / total + goldenRatio) % 1;
+            return `hsl(${hue * 360}, 70%, 50%)`;
+        }
+    
+        function formatNumber(value) {
+            return value.toLocaleString("en-IN"); // Adds commas (e.g., 1,00,000)
+        }
+    
+        function formatINR(value) {
+            return value.toLocaleString("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
+        }
+    
+        function renderFunnelChart(type, data) {
+            let chartId = {
+                'sov': 'sov-index',
+                'clicks': 'clicks-index',
+                'revenue': 'revenue-index',
+                'units': 'units-index'
+            }[type];
+    
+            let title = {
+                'sov': 'Brands By SOV Index',
+                'clicks': 'Brands By Clicks Index',
+                'revenue': 'Brands By Revenue',
+                'units': 'Brands By Units'
+            }[type];
+    
+            let chart = echarts.init(document.getElementById(chartId));
+    
+            let formattedData = data.map(item => ({
+                name: item.name,
+                value: item.value,
+                itemStyle: { color: window.brandColorMap[item.name] }
+            }));
+    
+            let option = {
+                title: { text: title, left: 'center', textStyle: { fontSize: 18, fontWeight: 'bold' } },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: (params) => {
+                        let value = type === 'revenue' ? formatINR(params.value) : formatNumber(params.value);
+                        return `${params.name}: ${value}`;
+                    }
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {},
+                        dataView: {},
+                        
+                        
+                    }
+                },
+                series: [{
+                    name: title,
+                    type: 'funnel',
+                    left: '10%',
+                    top: '10%',
+                    bottom: '10%',
+                    width: '50%',
+                    minSize: '0%',
+                    maxSize: '100%',
+                    sort: 'descending',
+                    gap: 5,
+                    label: { 
+                        show: true, 
+                        position: 'right', 
+                        formatter: (params) => {
+                            let value = type === 'revenue' ? formatINR(params.value) : formatNumber(params.value);
+                            return `${params.name}: ${value}`;
+                        } 
+                    },
+                    emphasis: { itemStyle: { opacity: 1, borderColor: '#000', borderWidth: 2 } },
+                    itemStyle: {
+                        borderRadius: 5,
+                        shadowBlur: 10,
+                        shadowColor: 'rgba(0, 0, 0, 0.3)'
+                    },
+                    data: formattedData
+                }]
+            };
+    
+            chart.setOption(option);
+            chartInstances[type] = chart;
+    
+            chart.on('click', function (params) {
+                highlightCharts(params.name);
+            });
+        }
+    
+        function highlightCharts(selectedBrand) {
+            Object.keys(chartInstances).forEach(type => {
+                let updatedData = originalData[type].map(item => ({
+                    name: item.name,
+                    value: item.value,
+                    itemStyle: {
+                        color: window.brandColorMap[item.name],
+                        opacity: item.name === selectedBrand ? 1 : 0.3
+                    }
+                }));
+                chartInstances[type].setOption({
+                    series: [{ data: updatedData }]
+                });
+            });
+        }
+    
+        fetchCSV("/static/data/d1.csv", "sov");
+        fetchCSV("/static/data/d2.csv", "clicks");
+        fetchCSV("/static/data/d3.csv", "revenue");
+        fetchCSV("/static/data/d4.csv", "units");
+    </script>
+    
+    
+    <script>
+        function toggleMenu() {
+            document.getElementById("navMenu").classList.toggle("show");
+        }
+    
+        // Set the Next button's URL
+        document.getElementById("nextPage").addEventListener("click", function() {
+            window.location.href = "e"; // Change this dynamically per page
+        });
+    
+        // Close menu when clicking outside
+        document.addEventListener("click", function(event) {
+            if (!event.target.closest(".menu-container")) {
+                document.getElementById("navMenu").classList.remove("show");
+            }
+        });
+    </script>
+</body>
+</html>

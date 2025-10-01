@@ -1,0 +1,391 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consolidated Brand Presence By BSR & Price</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+    <style>
+        .nav-container {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            padding: 8px 12px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .nav-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .menu-container {
+            position: relative;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .menu {
+            display: none;
+            position: absolute;
+            top: 30px;
+            left: 0;
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .menu a {
+            display: block;
+            padding: 5px 10px;
+            text-decoration: none;
+            color: black;
+        }
+
+        .menu a:hover {
+            background: #f0f0f0;
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
+
+    <style>
+        body {
+            background-color: #f4f6f9; /* Light off-white background */
+            font-family: 'Roboto', sans-serif;
+        }
+    
+        .container {
+            margin: 20px;
+            max-width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    
+        .table-wrapper {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+    
+        .table-container {
+            flex: 1;
+            min-width: 600px;
+            background-color: #ffffff; /* White background for the table containers */
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        }
+    
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+    
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #e1e1e1; /* Soft borders for a cleaner look */
+            font-size: 14px;
+        }
+    
+        th {
+            background-color: #f1f1f1; /* Soft gray for header */
+            color: #555555;
+            font-weight: 600;
+        }
+    
+        tbody tr {
+            transition: background-color 0.3s ease-in-out;
+        }
+    
+        tbody tr:hover {
+            background-color: #f7f7f7; /* Slightly darker hover effect */
+        }
+    
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9; /* Alternating row colors */
+        }
+    
+        select {
+            padding: 8px;
+            font-size: 14px;
+            margin: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            transition: all 0.3s;
+        }
+    
+        select:focus {
+            outline: none;
+            border-color: #5c6bc0; /* Subtle blue outline for select */
+            box-shadow: 0 0 5px rgba(92, 107, 192, 0.5);
+        }
+    
+        .dataTables_wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+    
+        .dataTables_length,
+        .dataTables_filter {
+            font-size: 14px;
+        }
+    
+        .dataTables_length select,
+        .dataTables_filter input {
+            margin: 10px;
+            padding: 8px;
+        }
+    
+        .dataTables_wrapper .dt-buttons {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+    
+        .dataTables_buttons .dt-button {
+            background-color: #5c6bc0;
+            color: white;
+            border-radius: 5px;
+            padding: 6px 12px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+    
+        .dataTables_buttons .dt-button:hover {
+            background-color: #3f51b5;
+        }
+        .header {
+            text-align: center;
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .table-container h3 {
+            text-align: center;
+            color: #333;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="logo" style="position: absolute; top: 20px; right: 20px;"><img src="{% static 'mlogo.png' %}" alt="Hive Logo" style="width: 160px; height: auto;"></div>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="history.back()">Back</button>
+        <button class="nav-btn" id="nextPage">Next</button>
+    
+        <div class="menu-container">
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
+            <div class="menu" id="navMenu">
+                <a href="four">Web</a>
+                <hr>
+                <a href="seven">App</a>
+                <hr>
+                <a href="a">Amazon</a>
+                <hr>
+                <a href="qcom">Q-Comm</a>
+                
+            </div>
+        </div>
+    </div>
+
+<div class="container">
+    <div class="header">Brand-Wise Assortment & Performance (Amazon)</div>
+    <label for="categoryFilter">Category:</label>
+    <select id="categoryFilter">
+        <option value="all">All</option>
+    </select>
+
+    <label for="brandFilter">Brand:</label>
+    <select id="brandFilter">
+        <option value="all">All</option>
+    </select>
+
+    <div class="table-wrapper">
+        <div class="table-container">
+            <h3>Table 1: Brand vs BSR Buckets</h3>
+            <table id="brandBsrTable" class="display hover stripe compact" style="width:100%">
+                <thead></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div class="table-container">
+            <h3>Table 2: Brand vs Price Buckets</h3>
+            <table id="brandPriceTable" class="display hover stripe compact" style="width:100%">
+                <thead></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <h3>Table 3: Price Buckets vs BSR Buckets</h3>
+        <table id="priceBsrTable" class="display hover stripe compact" style="width:100%">
+            <thead></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        let apiUrl = "/MInD/oneData";
+        let dataRecords = [];
+        let allCategories = new Set();
+
+        function fetchData() {
+            $.getJSON(apiUrl, function (data) {
+                dataRecords = data.records;
+                data.records.forEach(record => allCategories.add(record.category_dashb));
+
+                populateDropdowns();
+                renderTables();
+            });
+        }
+
+        function populateDropdowns() {
+            $('#categoryFilter').empty().append(`<option value="all">All</option>`);
+            $('#brandFilter').empty().append(`<option value="all">All</option>`);
+
+            [...allCategories].sort().forEach(cat => $('#categoryFilter').append(`<option value="${cat}">${cat}</option>`));
+
+            let allBrands = [...new Set(dataRecords.map(d => d.brand))].sort();
+            allBrands.forEach(brand => $('#brandFilter').append(`<option value="${brand}">${brand}</option>`));
+        }
+
+        function filterData() {
+            let selectedCategory = $('#categoryFilter').val();
+            let selectedBrand = $('#brandFilter').val();
+
+            return dataRecords.filter(d => 
+                (selectedCategory === "all" || d.category_dashb === selectedCategory) &&
+                (selectedBrand === "all" || d.brand === selectedBrand)
+            );
+        }
+
+        function prepareTableData() {
+            let filteredData = filterData();
+            let brandBsrData = {}, brandPriceData = {}, priceBsrData = {};
+            let allBsrBuckets = new Set(), allPriceBuckets = new Set();
+
+            filteredData.forEach(item => {
+                let brand = item.brand, bsr = item.bsr_bucket, price = item.price_bucket;
+
+                allBsrBuckets.add(bsr);
+                allPriceBuckets.add(price);
+
+                if (!brandBsrData[brand]) brandBsrData[brand] = {};
+                brandBsrData[brand][bsr] = (brandBsrData[brand][bsr] || 0) + 1;
+
+                if (!brandPriceData[brand]) brandPriceData[brand] = {};
+                brandPriceData[brand][price] = (brandPriceData[brand][price] || 0) + 1;
+
+                if (!priceBsrData[price]) priceBsrData[price] = {};
+                priceBsrData[price][bsr] = (priceBsrData[price][bsr] || 0) + 1;
+            });
+
+            return { 
+                brandBsrData, brandPriceData, priceBsrData,
+                allBsrBuckets: [...allBsrBuckets].sort((a, b) => a - b),
+                allPriceBuckets: [...allPriceBuckets].sort((a, b) => a - b)
+            };
+        }
+
+        function createTable(data, tableId, uniqueBuckets, rowLabel) {
+            let table = $(`#${tableId}`);
+            
+            if ($.fn.DataTable.isDataTable(table)) {
+                table.DataTable().destroy();
+            }
+
+            table.empty();
+            let headers = [`<th>${rowLabel}</th>`].concat(uniqueBuckets.map(bucket => `<th>${bucket}</th>`)).join("");
+            let thead = `<thead><tr>${headers}</tr></thead>`;
+
+            let tbody = Object.entries(data).map(([row, values]) => {
+                return `<tr><td>${row}</td>${uniqueBuckets.map(col => `<td>${values[col] || 0}</td>`).join("")}</tr>`;
+            }).join("");
+
+            table.append(`${thead}<tbody>${tbody}</tbody>`);
+
+            table.DataTable({
+                "processing": true,
+                "deferRender": true,
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                "pageLength": 10,
+                "dom": 'Bfrtip',
+                "buttons": [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ],
+                "hover": true
+            });
+        }
+
+        function renderTables() {
+            let { brandBsrData, brandPriceData, priceBsrData, allBsrBuckets, allPriceBuckets } = prepareTableData();
+
+            createTable(brandBsrData, "brandBsrTable", allBsrBuckets, "Brand");
+            createTable(brandPriceData, "brandPriceTable", allPriceBuckets, "Brand");
+            createTable(priceBsrData, "priceBsrTable", allBsrBuckets, "Price Bucket");
+        }
+
+        fetchData();
+        $('#categoryFilter, #brandFilter').change(renderTables);
+    });
+</script>
+<script>
+    function toggleMenu() {
+        document.getElementById("navMenu").classList.toggle("show");
+    }
+
+    // Set the Next button's URL
+    document.getElementById("nextPage").addEventListener("click", function() {
+        window.location.href = "a5"; // Change this dynamically per page
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener("click", function(event) {
+        if (!event.target.closest(".menu-container")) {
+            document.getElementById("navMenu").classList.remove("show");
+        }
+    });
+</script>
+</body>
+</html>

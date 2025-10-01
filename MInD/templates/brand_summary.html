@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Brand Summary</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #f8f8f8;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        header {
+            background-color: #4a90e2;
+            padding: 20px;
+            text-align: center;
+            color: #fff;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2em;
+            font-weight: 600;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 40px 20px;
+        }
+
+        .iframe-wrapper {
+            position: relative;
+            width: 80%;
+            max-width: 1000px;
+            height: 600px;
+            margin: 0 auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .iframe-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .overlay-strip {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: #f4f7f9;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Brand Summary</h1>
+    </header>
+
+    <div class="content">
+        <div class="iframe-wrapper">
+            <iframe
+                title="ChrysCapital"
+                src="https://app.powerbi.com/view?r=eyJrIjoiZWYyYWFkZjctZWQ2NS00MDViLTg0ZDMtNWQ1ODIzM2NlNDVmIiwidCI6ImFiMWM5NTBhLTE1MDAtNDUxOC1hOGQyLTBlZmM5NmUxZTJmOCJ9"
+                allowFullScreen="true">
+            </iframe>
+            <div class="overlay-strip"></div>
+        </div>
+    </div>
+</body>
+</html>

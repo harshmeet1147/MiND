@@ -1,0 +1,264 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media (Engagement)</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <style>
+        .header {
+            text-align: center;
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        body {
+            background-color: #f8f8f8;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .chart {
+            width: 2200px;
+            height: 600px;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .filter {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+        <style>
+            .nav-container {
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                z-index: 1000;
+            }
+    
+            .nav-btn {
+                padding: 8px 12px;
+                border: none;
+                background-color: #007bff;
+                color: white;
+                cursor: pointer;
+                border-radius: 5px;
+                font-size: 16px;
+            }
+    
+            .nav-btn:hover {
+                background-color: #0056b3;
+            }
+    
+            .menu-container {
+                position: relative;
+            }
+    
+            .menu-btn {
+                background: none;
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+            }
+    
+            .menu {
+                display: none;
+                position: absolute;
+                top: 30px;
+                left: 0;
+                background: white;
+                border: 1px solid #ccc;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+                border-radius: 5px;
+                padding: 10px;
+            }
+    
+            .menu a {
+                display: block;
+                padding: 5px 10px;
+                text-decoration: none;
+                color: black;
+            }
+    
+            .menu a:hover {
+                background: #f0f0f0;
+            }
+    
+            .show {
+                display: block;
+            }
+        </style>
+        <style>
+            .popup {
+                display: none;
+                position: fixed;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                padding: 20px;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+                z-index: 1000;
+                border-radius: 8px;
+            }
+        
+            .popup-content {
+                position: relative;
+            }
+        
+            .close-btn {
+        position: fixed;
+        top: 0px;
+        right: 10px;
+        cursor: pointer;
+        font-size: 40px;
+        font-weight: bold;
+        color: black;
+        background: none;
+        border: none;
+        outline: none;
+    }
+    
+    .close-btn:hover {
+        color: red;
+    }
+        </style>
+    
+</head>
+<body>
+    <div class="logo" style="position: absolute; top: 20px; right: 20px;"><img src="{% static 'mlogo.png' %}" alt="Hive Logo" style="width: 160px; height: auto;"></div>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="history.back()">Back</button>
+        <button class="nav-btn" id="nextPage">Next</button>
+        <button class="nav-btn" id="insightsBtn">Insights</button>
+        <div id="insightsPopup" class="popup">
+            <div class="popup-content">
+                <span class="close-btn" onclick="closePopup()">&times;</span>
+                <p><strong>BuyWOW</strong>: BuyWOW’s Overall SOV increased (55 → 73 → 92), but Neutral (%) remains high (66.67%), indicating engagement without strong sentiment shifts. Instagram Business SOV (44 → 58) and Facebook SOV (11 → 15) suggest growing brand presence on social media. If conversions aren’t improving, refining messaging to boost positive engagement could help.</p>
+
+<p><strong>Minimalist</strong>: Minimalist has a high Positive (%) (75%), but Neutral (%) (25%) suggests mild sentiment. With no recorded negatives, engagement may lack strong advocacy or criticism. If share of voice isn’t rising, more compelling storytelling or influencer-led credibility pushes could drive stronger brand differentiation.</p>
+
+<p><strong>Pilgrim</strong>: Pilgrim’s Positive (%) fell (50%) while Negative (%) rose (50%), signaling possible dissatisfaction or brand misalignment. If Facebook & Instagram SOV are absent, weaker community interaction may be limiting trust-building. Addressing negative sentiment through engagement-driven content or service improvements is critical.</p>
+
+
+            </div>
+        </div>
+    
+        <div class="menu-container">
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
+            <div class="menu" id="navMenu">
+                <a href="four">Web</a>
+                <hr>
+                <a href="seven">App</a>
+                <hr>
+                <a href="a">Amazon</a>
+                <hr>
+                <a href="qcom">Q-Comm</a>
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="filter">
+        <div class="header">Channel-Wise Social Media SOV Between Brands (Likes, Comments, Reshares, etc.)</div>
+        <label for="brandSelect">Select Brand:</label>
+        <select id="metricSelect" onchange="updateSOVChart()">
+            <option value="1">Overall SOV</option>
+            <option value="2">Instagram Business SOV</option>
+            <option value="3">Facebook SOV</option>
+        </select>
+    </div>
+    <div class="container">
+        <div id="sovChart" class="chart"></div>
+    </div>
+    <script>
+        const sovData = {
+            "WoW Skin Science": [
+                ["Jan'24", 71, 58, 14],
+                ["Feb'24", 71, 58, 14],
+                ["Oct'24", 53, 43, 11],
+                ["Nov'24", 71, 58, 14],
+                ["Dec'24", 89, 72, 18]
+            ],
+            "Minimalist": [
+                ["Jan'24", 76, 61, 15],
+                ["Feb'24", 75, 61, 15],
+                ["Oct'24", 57, 46, 11],
+                ["Nov'24", 76, 61, 15],
+                ["Dec'24", 95, 76, 19]
+            ],
+            "Pilgrim": [
+                ["Jan'24", 70, 53, 13],
+                ["Feb'24", 71, 52, 13],
+                ["Oct'24", 53, 39, 10],
+                ["Nov'24", 70, 53, 13],
+                ["Dec'24", 88, 66, 16]
+            ]
+        };
+
+        function updateSOVChart() {
+            const metricIndex = parseInt(document.getElementById("metricSelect").value);
+            const chart = echarts.init(document.getElementById("sovChart"));
+            
+            const option = {
+                title: { text: "Social Media SOV Comparison" },
+                tooltip: { trigger: 'axis' },
+                legend: { data: Object.keys(sovData) },
+                xAxis: { type: 'category', data: sovData["WoW Skin Science"].map(item => item[0]) },
+                yAxis: { type: 'value' },
+                series: Object.keys(sovData).map(brand => ({
+                    name: brand,
+                    type: 'line',
+                    smooth: true,
+                    data: sovData[brand].map(item => item[metricIndex]),
+                    markPoint: {
+                        data: [
+                            { type: 'max', name: 'Max' },
+                            { type: 'min', name: 'Min' }
+                        ]
+                    }
+                }))
+            };
+            chart.setOption(option);
+        }
+        updateSOVChart();
+    </script>
+    <script>
+        function toggleMenu() {
+            document.getElementById("navMenu").classList.toggle("show");
+        }
+    
+        // Set the Next button's URL
+        document.getElementById("nextPage").addEventListener("click", function() {
+            window.location.href = "a"; // Change dynamically per page
+        });
+    
+        // Close menu when clicking outside
+        document.addEventListener("click", function(event) {
+            if (!event.target.closest(".menu-container")) {
+                document.getElementById("navMenu").classList.remove("show");
+            }
+        });
+    
+        // Show Insights Popup
+        document.getElementById("insightsBtn").addEventListener("click", function() {
+            document.getElementById("insightsPopup").style.display = "block";
+        });
+    
+        // Close Insights Popup
+        function closePopup() {
+            document.getElementById("insightsPopup").style.display = "none";
+        }
+    </script>
+</body>
+</html>

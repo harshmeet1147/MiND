@@ -1,0 +1,962 @@
+[
+    {
+        "Date": "2024-11-01",
+        "Channel": "Retail",
+        "NTB": "532",
+        "City": "Mumbai",
+        "State": "Maharashtra",
+        "Brand": "lenskart"
+    },
+    {
+        "Date": "2024-11-01",
+        "Channel": "Store",
+        "NTB": "210",
+        "City": "Delhi",
+        "State": "Delhi",
+        "Brand": "muscleblaze"
+    },
+    {
+        "Date": "2024-11-02",
+        "Channel": "Web",
+        "NTB": "345",
+        "City": "Bangalore",
+        "State": "Karnataka",
+        "Brand": "wow"
+    },
+    {
+        "Date": "2024-11-02",
+        "Channel": "App",
+        "NTB": "678",
+        "City": "Chennai",
+        "State": "Tamil Nadu",
+        "Brand": "livguard"
+    },
+    {
+        "Date": "2024-11-03",
+        "Channel": "Retail",
+        "NTB": "123",
+        "City": "Kolkata",
+        "State": "West Bengal",
+        "Brand": "centre for sight"
+    },
+    {
+        "Date": "2024-11-03",
+        "Channel": "Store",
+        "NTB": "456",
+        "City": "Hyderabad",
+        "State": "Telangana",
+        "Brand": "Bandhan"
+    },
+    {
+        "Date": "2024-11-04",
+        "Channel": "Web",
+        "NTB": "789",
+        "City": "Pune",
+        "State": "Maharashtra",
+        "Brand": "Credila"
+    },
+    {
+        "Date": "2024-11-04",
+        "Channel": "App",
+        "NTB": "234",
+        "City": "Ahmedabad",
+        "State": "Gujarat",
+        "Brand": "Safex"
+    },
+    {
+        "Date": "2024-11-05",
+        "Channel": "Retail",
+        "NTB": "567",
+        "City": "Surat",
+        "State": "Gujarat",
+        "Brand": "lenskart"
+    },
+    {
+        "Date": "2024-11-05",
+        "Channel": "Store",
+        "NTB": "890",
+        "City": "Jaipur",
+        "State": "Rajasthan",
+        "Brand": "muscleblaze"
+    },
+    {
+        "Date": "2024-11-06",
+        "Channel": "Web",
+        "NTB": "321",
+        "City": "Lucknow",
+        "State": "Uttar Pradesh",
+        "Brand": "wow"
+    },
+    {
+        "Date": "2024-11-06",
+        "Channel": "App",
+        "NTB": "654",
+        "City": "Mumbai",
+        "State": "Maharashtra",
+        "Brand": "livguard"
+    },
+    {
+        "Date": "2024-11-07",
+        "Channel": "Retail",
+        "NTB": "987",
+        "City": "Delhi",
+        "State": "Delhi",
+        "Brand": "centre for sight"
+    },
+    {
+        "Date": "2024-11-07",
+        "Channel": "Store",
+        "NTB": "432",
+        "City": "Bangalore",
+        "State": "Karnataka",
+        "Brand": "Bandhan"
+    },
+    {
+        "Date": "2024-11-08",
+        "Channel": "Web",
+        "NTB": "213",
+        "City": "Chennai",
+        "State": "Tamil Nadu",
+        "Brand": "Credila"
+    },
+    {
+        "Date": "2024-11-08",
+        "Channel": "App",
+        "NTB": "546",
+        "City": "Kolkata",
+        "State": "West Bengal",
+        "Brand": "Safex"
+    },
+    {
+        "Date": "2024-11-09",
+        "Channel": "Retail",
+        "NTB": "879",
+        "City": "Hyderabad",
+        "State": "Telangana",
+        "Brand": "lenskart"
+    },
+    {
+        "Date": "2024-11-09",
+        "Channel": "Store",
+        "NTB": "312",
+        "City": "Pune",
+        "State": "Maharashtra",
+        "Brand": "muscleblaze"
+    },
+    {
+        "Date": "2024-11-10",
+        "Channel": "Web",
+        "NTB": "645",
+        "City": "Ahmedabad",
+        "State": "Gujarat",
+        "Brand": "wow"
+    },
+    {
+        "Date": "2024-11-10",
+        "Channel": "App",
+        "NTB": "978",
+        "City": "Surat",
+        "State": "Gujarat",
+        "Brand": "livguard"
+    },
+    {
+        "Date": "2024-11-11",
+        "Channel": "Retail",
+        "NTB": "210",
+        "City": "Jaipur",
+        "State": "Rajasthan",
+        "Brand": "centre for sight"
+    },
+    {
+        "Date": "2024-11-11",
+        "Channel": "Store",
+        "NTB": "543",
+        "City": "Lucknow",
+        "State": "Uttar Pradesh",
+        "Brand": "Bandhan"
+    },
+    {
+        "Date": "2024-11-12",
+        "Channel": "Web",
+        "NTB": "876",
+        "City": "Mumbai",
+        "State": "Maharashtra",
+        "Brand": "Credila"
+    },
+    {
+        "Date": "2024-11-12",
+        "Channel": "App",
+        "NTB": "109",
+        "City": "Delhi",
+        "State": "Delhi",
+        "Brand": "Safex"
+    },
+    {
+        "Date": "2024-11-13",
+        "Channel": "Retail",
+        "NTB": "432",
+        "City": "Bangalore",
+        "State": "Karnataka",
+        "Brand": "lenskart"
+    },
+    {
+        "Date": "2024-11-13",
+        "Channel": "Store",
+        "NTB": "765",
+        "City": "Chennai",
+        "State": "Tamil Nadu",
+        "Brand": "muscleblaze"
+    },
+    {
+        "Date": "2024-11-14",
+        "Channel": "Web",
+        "NTB": "198",
+        "City": "Kolkata",
+        "State": "West Bengal",
+        "Brand": "wow"
+    },
+    {
+        "Date": "2024-11-14",
+        "Channel": "App",
+        "NTB": "567",
+        "City": "Hyderabad",
+        "State": "Telangana",
+        "Brand": "livguard"
+    },
+    {
+        "Date": "2024-11-15",
+        "Channel": "Retail",
+        "NTB": "890",
+        "City": "Pune",
+        "State": "Maharashtra",
+        "Brand": "centre for sight"
+    },
+    {
+        "Date": "2024-11-15",
+        "Channel": "Store",
+        "NTB": "345",
+        "City": "Ahmedabad",
+        "State": "Gujarat",
+        "Brand": "Bandhan"
+    },
+    {
+        "Date": "2024-11-16",
+        "Channel": "Web",
+        "NTB": "678",
+        "City": "Surat",
+        "State": "Gujarat",
+        "Brand": "Credila"
+    },
+    {
+        "Date": "2024-11-16",
+        "Channel": "App",
+        "NTB": "234",
+        "City": "Jaipur",
+        "State": "Rajasthan",
+        "Brand": "Safex"
+    },
+    {
+        "Date": "2024-11-17",
+        "Channel": "Retail",
+        "NTB": "567",
+        "City": "Lucknow",
+        "State": "Uttar Pradesh",
+        "Brand": "lenskart"
+    },
+    {
+        "Date": "2024-11-17",
+        "Channel": "Store",
+        "NTB": "890",
+        "City": "Mumbai",
+        "State": "Maharashtra",
+        "Brand": "muscleblaze"
+    },
+    {
+        "Date": "2024-11-18",
+        "Channel": "Web",
+        "NTB": "123",
+        "City": "Delhi",
+        "State": "Delhi",
+        "Brand": "wow"
+    },
+    {
+        "Date": "2024-11-18",
+        "Channel": "App",
+        "NTB": "456",
+        "City": "Bangalore",
+        "State": "Karnataka",
+        "Brand": "livguard"
+    },
+    {
+        "Date": "2024-11-19",
+        "Channel": "Retail",
+        "NTB": "789",
+        "City": "Chennai",
+        "State": "Tamil Nadu",
+        "Brand": "centre for sight"
+    },
+    {
+        "Date": "2024-11-19",
+        "Channel": "Store",
+        "NTB": "234",
+        "City": "Kolkata",
+        "State": "West Bengal",
+        "Brand": "Bandhan"
+    },
+    {
+        "Date": "2024-11-20",
+        "Channel": "Web",
+        "NTB": "567",
+        "City": "Hyderabad",
+        "State": "Telangana",
+        "Brand": "Credila"
+    },
+    {
+        "Date": "2024-11-20",
+        "Channel": "App",
+        "NTB": "890",
+        "City": "Pune",
+        "State": "Maharashtra",
+        "Brand": "Safex"
+    },
+    {
+        "Date": "2024-12-01",
+        "Channel": "Retail",
+        "NTB": "321",
+        "City": "Ahmedabad",
+        "State": "Gujarat",
+        "Brand": "lenskart"
+    },
+    {
+        "Date": "2024-12-01",
+        "Channel": "Store",
+        "NTB": "654",
+        "City": "Surat",
+        "State": "Gujarat",
+        "Brand": "muscleblaze"
+    },
+    {
+        "Date": "2024-12-02",
+        "Channel": "Web",
+        "NTB": "987",
+        "City": "Jaipur",
+        "State": "Rajasthan",
+        "Brand": "wow"
+    },
+    {
+        "Date": "2024-12-02",
+        "Channel": "App",
+        "NTB": "432",
+        "City": "Lucknow",
+        "State": "Uttar Pradesh",
+        "Brand": "livguard"
+    },
+    {
+        "Date": "2024-12-03",
+        "Channel": "Retail",
+        "NTB": "213",
+        "City": "Mumbai",
+        "State": "Maharashtra",
+        "Brand": "centre for sight"
+    },
+    {
+        "Date": "2024-12-03",
+        "Channel": "Store",
+        "NTB": "546",
+        "City": "Delhi",
+        "State": "Delhi",
+        "Brand": "Bandhan"
+    },
+    {
+        "Date": "2024-12-04",
+        "Channel": "Web",
+        "NTB": "879",
+        "City": "Bangalore",
+        "State": "Karnataka",
+        "Brand": "Credila"
+    },
+    {
+        "Date": "2024-12-04",
+        "Channel": "App",
+        "NTB": "312",
+        "City": "Chennai",
+        "State": "Tamil Nadu",
+        "Brand": "Safex"
+    },
+    {
+        "Date": "2024-12-05",
+        "Channel": "Retail",
+        "NTB": "645",
+        "City": "Kolkata",
+        "State": "West Bengal",
+        "Brand": "lenskart"
+    },
+    {
+        "Date": "2024-12-05",
+        "Channel": "Store",
+        "NTB": "978",
+        "City": "Hyderabad",
+        "State": "Telangana",
+        "Brand": "muscleblaze"
+    },
+    {
+        "Date": "2024-12-06",
+        "Channel": "Web",
+        "NTB": "210",
+        "City": "Pune",
+        "State": "Maharashtra",
+        "Brand": "wow"
+    },
+    {
+        "Date": "2024-12-06",
+        "Channel": "App",
+        "NTB": "543",
+        "City": "Ahmedabad",
+        "State": "Gujarat",
+        "Brand": "livguard"
+    },
+    {
+        "Date": "2024-12-07",
+        "Channel": "Retail",
+        "NTB": "876",
+        "City": "Surat",
+        "State": "Gujarat",
+        "Brand": "centre for sight"
+    },
+    {
+        "Date": "2024-12-07",
+        "Channel": "Store",
+        "NTB": "109",
+        "City": "Jaipur",
+        "State": "Rajasthan",
+        "Brand": "Bandhan"
+    },
+    {
+        "Date": "2024-12-08",
+        "Channel": "Web",
+        "NTB": "432",
+        "City": "Lucknow",
+        "State": "Uttar Pradesh",
+        "Brand": "Credila"
+    },
+    {
+        "Date": "2024-12-08",
+        "Channel": "App",
+        "NTB": "765",
+        "City": "Mumbai",
+        "State": "Maharashtra",
+        "Brand": "Safex"
+    },
+    {
+        "Date": "2024-12-09",
+        "Channel": "Retail",
+        "NTB": "198",
+        "City": "Delhi",
+        "State": "Delhi",
+        "Brand": "lenskart"
+    },
+    {
+        "Date": "2024-12-09",
+        "Channel": "Store",
+        "NTB": "567",
+        "City": "Bangalore",
+        "State": "Karnataka",
+        "Brand": "muscleblaze"
+    },
+    {
+        "Date": "2024-12-10",
+        "Channel": "Web",
+        "NTB": "890",
+        "City": "Chennai",
+        "State": "Tamil Nadu",
+        "Brand": "wow"
+    },
+    {
+        "Date": "2024-12-10",
+        "Channel": "App",
+        "NTB": "345",
+        "City": "Kolkata",
+        "State": "West Bengal",
+        "Brand": "livguard"
+    },
+    {
+        "Date": "2024-12-11",
+        "Channel": "Retail",
+        "NTB": "678",
+        "City": "Hyderabad",
+        "State": "Telangana",
+        "Brand": "centre for sight"
+    },
+    {
+        "Date": "2024-12-11",
+        "Channel": "Store",
+        "NTB": "234",
+        "City": "Pune",
+        "State": "Maharashtra",
+        "Brand": "Bandhan"
+    },
+    {
+        "Date": "2024-12-12",
+        "Channel": "Web",
+        "NTB": "567",
+        "City": "Ahmedabad",
+        "State": "Gujarat",
+        "Brand": "Credila"
+    },
+    {
+        "Date": "2024-12-12",
+        "Channel": "App",
+        "NTB": "890",
+        "City": "Surat",
+        "State": "Gujarat",
+        "Brand": "Safex"
+    },
+    {
+        "Date": "2024-12-13",
+        "Channel": "Retail",
+        "NTB": "123",
+        "City": "Jaipur",
+        "State": "Rajasthan",
+        "Brand": "lenskart"
+    },
+    {
+        "Date": "2024-12-13",
+        "Channel": "Store",
+        "NTB": "456",
+        "City": "Lucknow",
+        "State": "Uttar Pradesh",
+        "Brand": "muscleblaze"
+    },
+    {
+        "Date": "2024-12-14",
+        "Channel": "Web",
+        "NTB": "789",
+        "City": "Mumbai",
+        "State": "Maharashtra",
+        "Brand": "wow"
+    },
+    {
+        "Date": "2024-12-14",
+        "Channel": "App",
+        "NTB": "234",
+        "City": "Delhi",
+        "State": "Delhi",
+        "Brand": "livguard"
+    },
+    {
+        "Date": "2024-12-15",
+        "Channel": "Retail",
+        "NTB": "567",
+        "City": "Bangalore",
+        "State": "Karnataka",
+        "Brand": "centre for sight"
+    },
+    {
+        "Date": "2024-12-15",
+        "Channel": "Store",
+        "NTB": "890",
+        "City": "Chennai",
+        "State": "Tamil Nadu",
+        "Brand": "Bandhan"
+    },
+    {
+        "Date": "2024-12-16",
+        "Channel": "Web",
+        "NTB": "345",
+        "City": "Kolkata",
+        "State": "West Bengal",
+        "Brand": "Credila"
+    },
+    {
+        "Date": "2024-12-16",
+        "Channel": "App",
+        "NTB": "678",
+        "City": "Hyderabad",
+        "State": "Telangana",
+        "Brand": "Safex"
+    },
+    {
+        "Date": "2024-12-17",
+        "Channel": "Retail",
+        "NTB": "234",
+        "City": "Pune",
+        "State": "Maharashtra",
+        "Brand": "lenskart"
+    },
+    {
+        "Date": "2024-12-17",
+        "Channel": "Store",
+        "NTB": "567",
+        "City": "Ahmedabad",
+        "State": "Gujarat",
+        "Brand": "muscleblaze"
+    },
+    {
+        "Date": "2024-12-18",
+        "Channel": "Web",
+        "NTB": "890",
+        "City": "Surat",
+        "State": "Gujarat",
+        "Brand": "wow"
+    },
+    {
+        "Date": "2024-12-18",
+        "Channel": "App",
+        "NTB": "123",
+        "City": "Jaipur",
+        "State": "Rajasthan",
+        "Brand": "livguard"
+    },
+    {
+        "Date": "2024-12-19",
+        "Channel": "Retail",
+        "NTB": "456",
+        "City": "Lucknow",
+        "State": "Uttar Pradesh",
+        "Brand": "centre for sight"
+    },
+    {
+        "Date": "2024-12-19",
+        "Channel": "Store",
+        "NTB": "789",
+        "City": "Mumbai",
+        "State": "Maharashtra",
+        "Brand": "Bandhan"
+    },
+    {
+        "Date": "2024-12-20",
+        "Channel": "Web",
+        "NTB": "234",
+        "City": "Delhi",
+        "State": "Delhi",
+        "Brand": "Credila"
+    },
+    {
+        "Date": "2024-12-20",
+        "Channel": "App",
+        "NTB": "567",
+        "City": "Bangalore",
+        "State": "Karnataka",
+        "Brand": "Safex"
+    },
+    {
+        "Date": "2025-01-01",
+        "Channel": "Retail",
+        "NTB": "890",
+        "City": "Chennai",
+        "State": "Tamil Nadu",
+        "Brand": "lenskart"
+    },
+    {
+        "Date": "2025-01-01",
+        "Channel": "Store",
+        "NTB": "345",
+        "City": "Kolkata",
+        "State": "West Bengal",
+        "Brand": "muscleblaze"
+    },
+    {
+        "Date": "2025-01-02",
+        "Channel": "Web",
+        "NTB": "678",
+        "City": "Hyderabad",
+        "State": "Telangana",
+        "Brand": "wow"
+    },
+    {
+        "Date": "2025-01-02",
+        "Channel": "App",
+        "NTB": "234",
+        "City": "Pune",
+        "State": "Maharashtra",
+        "Brand": "livguard"
+    },
+    {
+        "Date": "2025-01-03",
+        "Channel": "Retail",
+        "NTB": "567",
+        "City": "Ahmedabad",
+        "State": "Gujarat",
+        "Brand": "centre for sight"
+    },
+    {
+        "Date": "2025-01-03",
+        "Channel": "Store",
+        "NTB": "890",
+        "City": "Surat",
+        "State": "Gujarat",
+        "Brand": "Bandhan"
+    },
+    {
+        "Date": "2025-01-04",
+        "Channel": "Web",
+        "NTB": "123",
+        "City": "Jaipur",
+        "State": "Rajasthan",
+        "Brand": "Credila"
+    },
+    {
+        "Date": "2025-01-04",
+        "Channel": "App",
+        "NTB": "456",
+        "City": "Lucknow",
+        "State": "Uttar Pradesh",
+        "Brand": "Safex"
+    },
+    {
+        "Date": "2025-01-05",
+        "Channel": "Retail",
+        "NTB": "789",
+        "City": "Mumbai",
+        "State": "Maharashtra",
+        "Brand": "lenskart"
+    },
+    {
+        "Date": "2025-01-05",
+        "Channel": "Store",
+        "NTB": "234",
+        "City": "Delhi",
+        "State": "Delhi",
+        "Brand": "muscleblaze"
+    },
+    {
+        "Date": "2025-01-06",
+        "Channel": "Web",
+        "NTB": "567",
+        "City": "Bangalore",
+        "State": "Karnataka",
+        "Brand": "wow"
+    },
+    {
+        "Date": "2025-01-06",
+        "Channel": "App",
+        "NTB": "890",
+        "City": "Chennai",
+        "State": "Tamil Nadu",
+        "Brand": "livguard"
+    },
+    {
+        "Date": "2025-01-07",
+        "Channel": "Retail",
+        "NTB": "345",
+        "City": "Kolkata",
+        "State": "West Bengal",
+        "Brand": "centre for sight"
+    },
+    {
+        "Date": "2025-01-07",
+        "Channel": "Store",
+        "NTB": "678",
+        "City": "Hyderabad",
+        "State": "Telangana",
+        "Brand": "Bandhan"
+    },
+    {
+        "Date": "2025-01-08",
+        "Channel": "Web",
+        "NTB": "234",
+        "City": "Pune",
+        "State": "Maharashtra",
+        "Brand": "Credila"
+    },
+    {
+        "Date": "2025-01-08",
+        "Channel": "App",
+        "NTB": "567",
+        "City": "Ahmedabad",
+        "State": "Gujarat",
+        "Brand": "Safex"
+    },
+    {
+        "Date": "2025-01-09",
+        "Channel": "Retail",
+        "NTB": "890",
+        "City": "Surat",
+        "State": "Gujarat",
+        "Brand": "lenskart"
+    },
+    {
+        "Date": "2025-01-09",
+        "Channel": "Store",
+        "NTB": "123",
+        "City": "Jaipur",
+        "State": "Rajasthan",
+        "Brand": "muscleblaze"
+    },
+    {
+        "Date": "2025-01-10",
+        "Channel": "Web",
+        "NTB": "456",
+        "City": "Lucknow",
+        "State": "Uttar Pradesh",
+        "Brand": "wow"
+    },
+    {
+        "Date": "2025-01-10",
+        "Channel": "App",
+        "NTB": "789",
+        "City": "Mumbai",
+        "State": "Maharashtra",
+        "Brand": "livguard"
+    },
+    {
+        "Date": "2025-01-11",
+        "Channel": "Retail",
+        "NTB": "234",
+        "City": "Delhi",
+        "State": "Delhi",
+        "Brand": "centre for sight"
+    },
+    {
+        "Date": "2025-01-11",
+        "Channel": "Store",
+        "NTB": "567",
+        "City": "Bangalore",
+        "State": "Karnataka",
+        "Brand": "Bandhan"
+    },
+    {
+        "Date": "2025-01-12",
+        "Channel": "Web",
+        "NTB": "890",
+        "City": "Chennai",
+        "State": "Tamil Nadu",
+        "Brand": "Credila"
+    },
+    {
+        "Date": "2025-01-12",
+        "Channel": "App",
+        "NTB": "345",
+        "City": "Kolkata",
+        "State": "West Bengal",
+        "Brand": "Safex"
+    },
+    {
+        "Date": "2025-01-13",
+        "Channel": "Retail",
+        "NTB": "678",
+        "City": "Hyderabad",
+        "State": "Telangana",
+        "Brand": "lenskart"
+    },
+    {
+        "Date": "2025-01-13",
+        "Channel": "Store",
+        "NTB": "234",
+        "City": "Pune",
+        "State": "Maharashtra",
+        "Brand": "muscleblaze"
+    },
+    {
+        "Date": "2025-01-14",
+        "Channel": "Web",
+        "NTB": "567",
+        "City": "Ahmedabad",
+        "State": "Gujarat",
+        "Brand": "wow"
+    },
+    {
+        "Date": "2025-01-14",
+        "Channel": "App",
+        "NTB": "890",
+        "City": "Surat",
+        "State": "Gujarat",
+        "Brand": "livguard"
+    },
+    {
+        "Date": "2025-01-15",
+        "Channel": "Retail",
+        "NTB": "123",
+        "City": "Jaipur",
+        "State": "Rajasthan",
+        "Brand": "centre for sight"
+    },
+    {
+        "Date": "2025-01-15",
+        "Channel": "Store",
+        "NTB": "456",
+        "City": "Lucknow",
+        "State": "Uttar Pradesh",
+        "Brand": "Bandhan"
+    },
+    {
+        "Date": "2025-01-16",
+        "Channel": "Web",
+        "NTB": "789",
+        "City": "Mumbai",
+        "State": "Maharashtra",
+        "Brand": "Credila"
+    },
+    {
+        "Date": "2025-01-16",
+        "Channel": "App",
+        "NTB": "234",
+        "City": "Delhi",
+        "State": "Delhi",
+        "Brand": "Safex"
+    },
+    {
+        "Date": "2025-01-17",
+        "Channel": "Retail",
+        "NTB": "567",
+        "City": "Bangalore",
+        "State": "Karnataka",
+        "Brand": "lenskart"
+    },
+    {
+        "Date": "2025-01-17",
+        "Channel": "Store",
+        "NTB": "890",
+        "City": "Chennai",
+        "State": "Tamil Nadu",
+        "Brand": "muscleblaze"
+    },
+    {
+        "Date": "2025-01-18",
+        "Channel": "Web",
+        "NTB": "345",
+        "City": "Kolkata",
+        "State": "West Bengal",
+        "Brand": "wow"
+    },
+    {
+        "Date": "2025-01-18",
+        "Channel": "App",
+        "NTB": "678",
+        "City": "Hyderabad",
+        "State": "Telangana",
+        "Brand": "livguard"
+    },
+    {
+        "Date": "2025-01-19",
+        "Channel": "Retail",
+        "NTB": "234",
+        "City": "Pune",
+        "State": "Maharashtra",
+        "Brand": "centre for sight"
+    },
+    {
+        "Date": "2025-01-19",
+        "Channel": "Store",
+        "NTB": "567",
+        "City": "Ahmedabad",
+        "State": "Gujarat",
+        "Brand": "Bandhan"
+    },
+    {
+        "Date": "2025-01-20",
+        "Channel": "Web",
+        "NTB": "890",
+        "City": "Surat",
+        "State": "Gujarat",
+        "Brand": "Credila"
+    },
+    {
+        "Date": "2025-01-20",
+        "Channel": "App",
+        "NTB": "123",
+        "City": "Jaipur",
+        "State": "Rajasthan",
+        "Brand": "Safex"
+    }
+]

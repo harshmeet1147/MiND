@@ -1,0 +1,325 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Share Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+        .header { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; }
+        .chart-container { display: flex; justify-content: space-around; }
+        .table-container { margin-top: 20px; max-height: 300px; overflow-y: auto; background: white; padding: 10px; border-radius: 5px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        th { background-color: #009688; color: white; position: sticky; top: 0; z-index: 2; }
+        select { padding: 5px; font-size: 16px; }
+    </style>
+    <style>
+        .nav-container {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            padding: 8px 12px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .nav-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .menu-container {
+            position: relative;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .menu {
+            display: none;
+            position: absolute;
+            top: 30px;
+            left: 0;
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .menu a {
+            display: block;
+            padding: 5px 10px;
+            text-decoration: none;
+            color: black;
+        }
+
+        .menu a:hover {
+            background: #f0f0f0;
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="logo" style="position: absolute; top: 20px; right: 20px;"><img src="{% static 'mlogo.png' %}" alt="Hive Logo" style="width: 160px; height: auto;"></div>
+
+
+    <div class="header">
+        <h2>Market Share & Category Size</h2>
+        <label>
+            Category:
+            <select id="category-select">
+                <!-- Options will be populated dynamically -->
+            </select>
+        </label>
+    </div>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="history.back()">Back</button>
+        <button class="nav-btn" id="nextPage">Next</button>
+    
+        <div class="menu-container">
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
+            <div class="menu" id="navMenu">
+                <a href="four">Web</a>
+                <hr>
+                <a href="seven">App</a>
+                <hr>
+                <a href="a">Amazon</a>
+                <hr>
+                <a href="qcom">Q-Comm</a>
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="chart-container">
+        <div id="revenue-share" style="width: 900px; height: 600px;"></div>
+        <div id="units-sold-share" style="width: 900px; height: 600px;"></div>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Brand</th>
+                    <th>Units</th>
+                    <th>Revenue</th>
+                    <th>AOV</th>
+                    <th>Unit Sold Share (%)</th>
+                    <th>Revenue Share (%)</th>
+                </tr>
+            </thead>
+            <tbody id="data-table"></tbody>
+        </table>
+    </div>
+    
+    <script>
+        let fullMarketData = []; // Holds all unfiltered data
+        let revenueData = [];
+        let unitData = [];
+        let marketData = [];
+    
+        function fetchMarketData(url) {
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    fullMarketData = data; // Save original data
+                    populateDropdown(); // Populate dropdown before filtering
+                    const initialCategory = document.getElementById("category-select").value;
+                    filterByCategory(initialCategory);
+                })
+                .catch(error => console.error("Error fetching data:", error));
+        }
+    
+        function populateDropdown() {
+            const select = document.getElementById("category-select");
+            const categories = [...new Set(fullMarketData.map(d => d.category))].sort();
+            select.innerHTML = categories.map(cat => `<option value="${cat}">${cat}</option>`).join("");
+    
+            // Add event listener for change
+            select.addEventListener("change", (e) => {
+                filterByCategory(e.target.value);
+            });
+        }
+    
+        function filterByCategory(category) {
+    const rawData = fullMarketData.filter(d => d.category === category);
+    
+    // Aggregate by brand
+    const brandMap = {};
+    rawData.forEach(d => {
+        const brand = d.Brand.trim();
+        if (!brandMap[brand]) {
+            brandMap[brand] = {
+                Brand: brand,
+                Units: 0,
+                Revenue: 0,
+                AOV: 0,
+                unitsoldshare: 0,
+                revenueshare: 0
+            };
+        }
+        brandMap[brand].Units += parseFloat(d.Units);
+        brandMap[brand].Revenue += parseFloat(d.Revenue);
+    });
+
+    // Recalculate shares
+    const aggregatedData = Object.values(brandMap);
+    const totalRevenue = aggregatedData.reduce((sum, d) => sum + d.Revenue, 0);
+    const totalUnits = aggregatedData.reduce((sum, d) => sum + d.Units, 0);
+
+    aggregatedData.forEach(d => {
+    const aov = d.Units ? (d.Revenue / d.Units) : 0;
+    const revShare = totalRevenue ? ((d.Revenue / totalRevenue) * 100) : 0;
+    const unitShare = totalUnits ? ((d.Units / totalUnits) * 100) : 0;
+
+    d.AOV = `₹${Math.round(aov).toLocaleString('en-IN')}`;
+    d.revenueshare = `${Math.round(revShare)}%`;
+    d.unitsoldshare = `${Math.round(unitShare)}%`;
+});
+
+    // Update global state
+    marketData = aggregatedData;
+    revenueData = aggregatedData.map(d => ({ name: d.Brand, value: parseFloat(d.revenueshare) }));
+    unitData = aggregatedData.map(d => ({ name: d.Brand, value: parseFloat(d.unitsoldshare) }));
+
+    renderCharts();
+    renderTable();
+}
+    
+function renderCharts() {
+    const revenueChart = echarts.init(document.getElementById("revenue-share"));
+    const unitChart = echarts.init(document.getElementById("units-sold-share"));
+
+    const allBrands = Array.from(new Set([
+        ...revenueData.map(d => d.name),
+        ...unitData.map(d => d.name)
+    ]));
+
+    function generateColor(index, total) {
+        const goldenRatio = 0.61803398875;
+        let hue = (index / total + goldenRatio) % 1;
+        return `hsl(${hue * 360}, 70%, 50%)`;
+    }
+
+    const brandColorMap = Object.fromEntries(
+        allBrands.map((brand, index) => [brand, generateColor(index, allBrands.length)])
+    );
+
+    const applyColors = (data) => data.map(d => ({
+        ...d,
+        itemStyle: { color: brandColorMap[d.name] || '#ccc' }
+    }));
+
+    function prepareTop10Data(data) {
+        const sorted = [...data].sort((a, b) => b.value - a.value);
+        const top10 = sorted.slice(0, 10);
+        const others = sorted.slice(10);
+        const othersValue = others.reduce((sum, d) => sum + d.value, 0);
+        if (othersValue > 0) {
+            top10.push({ name: 'Others', value: othersValue });
+        }
+        return top10;
+    }
+
+    const option = (title, data) => ({
+        title: { text: title, textStyle: { fontSize: 16, fontWeight: 'bold' } },
+        tooltip: {
+            trigger: 'item',
+            formatter: function (params) {
+                return `${params.name}: ${params.value.toFixed(2)} (${params.percent.toFixed(2)}%)`;
+            }
+        },
+        toolbox: { feature: { saveAsImage: {}, restore: {} } },
+        legend: { bottom: 0 },
+        series: [{
+            type: 'pie',
+            radius: ['40%', '70%'],
+            label: {
+                show: true,
+                formatter: function (params) {
+                    return `${params.name}\n (${params.percent.toFixed(0)}%)`;
+                }
+            },
+            emphasis: {
+                itemStyle: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            },
+            data: applyColors(data)
+        }]
+    });
+
+    const topRevenue = prepareTop10Data(revenueData);
+    const topUnits = prepareTop10Data(unitData);
+
+    revenueChart.setOption(option("Revenue Share (%) by Brand", topRevenue));
+    unitChart.setOption(option("Unit Sold Share (%) by Brand", topUnits));
+}
+
+
+    
+        function renderTable() {
+            const tbody = document.getElementById("data-table");
+            tbody.innerHTML = "";
+    
+            const rows = marketData.map(row => `
+                <tr>
+                    <td>${row.Brand}</td>
+                    <td>${Number(row.Units).toLocaleString('en-IN')}</td>
+                    <td>₹${Number(row.Revenue).toLocaleString('en-IN')}</td>
+                    <td>${row.AOV}</td>
+                    <td>${row.unitsoldshare}</td>
+                    <td>${row.revenueshare}</td>
+                </tr>
+            `).join("");
+    
+            tbody.innerHTML = rows;
+        }
+    
+        // Load data from Django view
+        fetchMarketData("http://127.0.0.1:8000/MInD/heliumdata_a");
+    </script>
+    
+    
+    <script>
+        function toggleMenu() {
+            document.getElementById("navMenu").classList.toggle("show");
+        }
+    
+        // Set the Next button's URL
+        document.getElementById("nextPage").addEventListener("click", function() {
+            window.location.href = "b"; // Change this dynamically per page
+        });
+    
+        // Close menu when clicking outside
+        document.addEventListener("click", function(event) {
+            if (!event.target.closest(".menu-container")) {
+                document.getElementById("navMenu").classList.remove("show");
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WOW App - Active Users/Downloads/Installs</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.0/dist/echarts.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f7f4; /* Off-white background */
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+        .chart-container {
+            width: 80%;
+            max-width: 900px;
+            height: 500px;
+            margin: auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .navigation {
+    margin: 20px 0;
+}
+.navigation {
+            position: absolute;
+            width: 100%;
+            bottom: 0px;
+            display: flex;
+            justify-content: center;
+            gap: 70px;
+
+            
+        }
+        .nav-button {
+            font-size: 60px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #007BFF;
+        }
+        .nav-button:hover {
+            color: #0056b3;
+    </style>
+</head>
+<body>
+
+    <h1>WOW App - Active Users / Downloads / Installs (Daily)</h1>
+    <div id="wowChart" class="chart-container"></div>
+    <div class="navigation">
+        <button class="nav-button" onclick="goBack()">&#8592;</button>
+        <button class="nav-button" onclick="goNext()">&#8594;</button>
+    </div>
+
+    <script>
+        var chart = echarts.init(document.getElementById('wowChart'));
+
+        var dayData = [];
+        var activeUsers = [];
+        var downloads = [];
+        var installs = [];
+
+        function getRandomValue(base, range) {
+            return (base + Math.random() * range).toFixed(2);
+        }
+
+        function getFormattedDate(daysAgo) {
+            var date = new Date();
+            date.setDate(date.getDate() - daysAgo);
+            return date.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+        }
+
+        function updateData() {
+            if (dayData.length > 30) {
+                dayData.shift();
+                activeUsers.shift();
+                downloads.shift();
+                installs.shift();
+            }
+
+            let newDate = getFormattedDate(0);
+            if (!dayData.includes(newDate)) {
+                dayData.push(newDate);
+                activeUsers.push(getRandomValue(5000, 500));
+                downloads.push(getRandomValue(3000, 300));
+                installs.push(getRandomValue(2000, 200));
+
+                chart.setOption({
+                    xAxis: { data: dayData },
+                    series: [
+                        { data: activeUsers },
+                        { data: downloads },
+                        { data: installs }
+                    ]
+                });
+            }
+        }
+
+        for (let i = 10; i >= 0; i--) {
+            dayData.push(getFormattedDate(i));
+            activeUsers.push(getRandomValue(5000, 500));
+            downloads.push(getRandomValue(3000, 300));
+            installs.push(getRandomValue(2000, 200));
+        }
+
+        var option = {
+            title: {
+                text: 'Daily Active Users, Downloads, and Installs',
+                left: 'center',
+                textStyle: { fontSize: 18, fontWeight: 'bold', color: '#333' }
+            },
+            tooltip: { trigger: 'axis' },
+            xAxis: {
+                type: 'category',
+                data: dayData,
+                axisLine: { lineStyle: { color: '#888' } },
+                axisLabel: { rotate: 45 }
+            },
+            yAxis: {
+                type: 'value',
+                axisLine: { lineStyle: { color: '#888' } },
+                splitLine: { lineStyle: { color: '#eee' } }
+            },
+            legend: {
+                data: ['Active Users', 'Downloads', 'Installs'],
+                top: '10%'
+            },
+            series: [
+                {
+                    name: 'Active Users',
+                    type: 'line',
+                    data: activeUsers,
+                    smooth: true,
+                    lineStyle: { color: '#007bff', width: 3 },
+                    itemStyle: { color: '#007bff' },
+                    areaStyle: { color: 'rgba(0, 123, 255, 0.2)' }
+                },
+                {
+                    name: 'Downloads',
+                    type: 'line',
+                    data: downloads,
+                    smooth: true,
+                    lineStyle: { color: '#28a745', width: 3 },
+                    itemStyle: { color: '#28a745' },
+                    areaStyle: { color: 'rgba(40, 167, 69, 0.2)' }
+                },
+                {
+                    name: 'Installs',
+                    type: 'line',
+                    data: installs,
+                    smooth: true,
+                    lineStyle: { color: '#ff7300', width: 3 },
+                    itemStyle: { color: '#ff7300' },
+                    areaStyle: { color: 'rgba(255, 115, 0, 0.2)' }
+                }
+            ],
+            animationDuration: 2000
+        };
+
+        chart.setOption(option);
+        setInterval(updateData, 5000);
+        function goBack() {
+    window.history.back();
+}
+
+function goNext() {
+    window.location.href = 'quality ';
+}
+</script>
+
+</body>
+</html>

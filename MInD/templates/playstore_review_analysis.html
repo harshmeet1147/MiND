@@ -1,0 +1,299 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Playstore App Analysis</title>
+  <style>
+    .nav-container {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        z-index: 1000;
+    }
+
+    .nav-btn {
+        padding: 8px 12px;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    .nav-btn:hover {
+        background-color: #0056b3;
+    }
+
+    .menu-container {
+        position: relative;
+    }
+
+    .menu-btn {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    .menu {
+        display: none;
+        position: absolute;
+        top: 30px;
+        left: 0;
+        background: white;
+        border: 1px solid #ccc;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    .menu a {
+        display: block;
+        padding: 5px 10px;
+        text-decoration: none;
+        color: black;
+    }
+
+    .menu a:hover {
+        background: #f0f0f0;
+    }
+
+    .show {
+        display: block;
+    }
+</style>
+
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: #f8f8f5;
+      padding: 40px;
+      margin: 0;
+      color: #333;
+      text-align: center;
+    }
+    h1 {
+      font-size: 28px;
+      margin-bottom: 40px;
+      color: #1e3a5f;
+    }
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .brand-card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      text-align: left;
+      transition: transform 0.3s ease;
+    }
+    .brand-card:hover {
+      transform: scale(1.02);
+    }
+    .brand-card h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #1e3a5f;
+    }
+    .brand-card p {
+      font-size: 14px;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    details {
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+      background-color: #f9f9f9;
+    }
+    details summary {
+      font-weight: bold;
+      cursor: pointer;
+      outline: none;
+      font-size: 15px;
+    }
+    details[open] summary {
+      color: #007BFF;
+    }
+    ul {
+      margin: 5px 0 10px 20px;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+    @media (max-width: 1000px) {
+      .grid-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 600px) {
+      .grid-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="logo" style="position: absolute; top: 20px; right: 20px;"><img src="{% static 'mlogo.png' %}" alt="Hive Logo" style="width: 160px; height: auto;"></div>
+  <div class="nav-container">
+    <button class="nav-btn" onclick="history.back()">Back</button>
+    <button class="nav-btn" id="nextPage">Next</button>
+
+    <div class="menu-container">
+        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+        <div class="menu" id="navMenu">
+          <a href="four">Web</a>
+          <hr>
+          <a href="seven">App</a>
+          <hr>
+          <a href="a">Amazon</a>
+          <hr>
+          <a href="qcom">Q-Comm</a>
+          
+      </div>
+    </div>
+</div>
+  <h1>Playstore App Analysis</h1>
+  <div class="grid-container">
+    <!-- Minimalist Card -->
+    <div class="brand-card">
+      <h2>Final Comprehensive Analysis for Brand: Minimalist</h2>
+      <p><strong>Final Brand Analysis for 'Minimalist'</strong></p>
+      <details>
+        <summary><strong>Strengths</strong></summary>
+        <ul>
+          <li><strong>Differentiated Positioning:</strong> 'Minimalist' successfully establishes a distinct position in the skincare market by emphasizing simplicity, efficacy, and transparency.</li>
+          <li><strong>High-Quality Ingredients:</strong> The brand utilizes scientifically proven ingredients backed by research to ensure product effectiveness.</li>
+          <li><strong>Customer-Focused Approach:</strong> 'Minimalist' prioritizes customer satisfaction through personalized consultations, responsive customer service, and a focus on real-world results.</li>
+          <li><strong>Strong Online Presence:</strong> The brand has built a robust online presence through its website, social media channels, and e-commerce platforms, effectively reaching a wider audience.</li>
+          <li><strong>Positive Customer Reviews:</strong> 'Minimalist' has consistently received positive customer feedback, highlighting the efficacy and value of its products.</li>
+        </ul>
+      </details>
+      <details>
+        <summary><strong>Weaknesses</strong></summary>
+        <ul>
+          <li><strong>Limited Product Range:</strong> Compared to competitors, 'Minimalist' offers a relatively limited product range, which may hinder its reach in certain market segments.</li>
+          <li><strong>Premium Pricing:</strong> The brand's products are priced at a premium, which may limit accessibility for some customers.</li>
+          <li><strong>Lack of Physical Presence:</strong> 'Minimalist' relies primarily on online channels for distribution, potentially restricting its reach to consumers who prefer in-store shopping experiences.</li>
+          <li><strong>Competition from Established Brands:</strong> The skincare industry is highly competitive, with well-established brands holding significant market share. 'Minimalist' faces challenges in gaining visibility and market recognition amidst these players.</li>
+        </ul>
+      </details>
+      <details>
+        <summary><strong>Exploitable Points</strong></summary>
+        <ul>
+          <li><strong>Expansion of Product Range:</strong> Expanding the product line to cater to a wider range of skincare concerns and demographics.</li>
+          <li><strong>Lower Price Points:</strong> Offering products at more affordable price points to increase accessibility and appeal to a broader customer base.</li>
+          <li><strong>Partnerships and Collaborations:</strong> Establishing partnerships with influencers, dermatologists, or skincare professionals to enhance brand credibility and reach potential customers.</li>
+          <li><strong>Enhanced Customer Experience:</strong> Providing personalized product recommendations, educational content, and exclusive promotions to foster customer loyalty and satisfaction.</li>
+          <li><strong>Physical Distribution Expansion:</strong> Exploring strategic partnerships with brick-and-mortar retailers to provide a more tangible touchpoint for consumers.</li>
+        </ul>
+      </details>
+    </div>
+    
+    <!-- Wow Card -->
+    <div class="brand-card">
+      <h2>Brand Level Analysis - Wow</h2>
+      <p><strong>Wow Brand Analysis: Comprehensive Insights</strong></p>
+      <details>
+        <summary><strong>Strengths</strong></summary>
+        <ul>
+          <li><strong>Highly Effective Products:</strong> Customers rave about the visible results achieved after using Wow products, highlighting their effectiveness.</li>
+          <li><strong>Excellent Customer Service:</strong> Positive reviews consistently mention prompt and helpful customer support, enhancing overall satisfaction.</li>
+          <li><strong>Natural and Organic Ingredients:</strong> The brand's emphasis on natural and organic ingredients appeals to health-conscious consumers seeking healthier alternatives.</li>
+          <li><strong>Value for Money:</strong> Wow products are generally priced competitively, offering great value to customers.</li>
+          <li><strong>Positive Brand Reputation:</strong> Wow has established a strong reputation for reliability and quality, attracting loyal customers.</li>
+        </ul>
+      </details>
+      <details>
+        <summary><strong>Weaknesses</strong></summary>
+        <ul>
+          <li><strong>Shipping Delays:</strong> Some reviews indicate occasional delays in order fulfillment, which can impact customer experience and satisfaction.</li>
+          <li><strong>App Functionality Issues:</strong> The Wow app has received criticism for glitches and user interface issues, hindering the shopping experience.</li>
+          <li><strong>Product Expiry Concerns:</strong> A few reviews express concerns about receiving products close to their expiry dates, raising questions about inventory management.</li>
+          <li><strong>Limited Product Availability:</strong> Wow products may not be readily available in all locations, potentially restricting accessibility for some customers.</li>
+          <li><strong>Quality Inconsistency:</strong> Isolated reports suggest inconsistencies in product quality, warranting closer examination and improvement measures.</li>
+        </ul>
+      </details>
+      <details>
+        <summary><strong>Exploitable Points</strong></summary>
+        <ul>
+          <li><strong>Optimize Delivery Processes:</strong> Streamlining logistics and partnering with reliable carriers could significantly reduce shipping delays and improve customer satisfaction.</li>
+          <li><strong>Enhance App Functionality:</strong> Addressing technical issues, improving the user interface, and ensuring a seamless app experience would enhance customer engagement and loyalty.</li>
+          <li><strong>Establish Strict Quality Control:</strong> Implementing robust quality control measures and supplier audits would minimize product quality variations and maintain brand reputation.</li>
+          <li><strong>Expand Distribution Channels:</strong> Exploring partnerships with additional retailers and online marketplaces could increase product availability and reach a wider customer base.</li>
+          <li><strong>Address Product Expiry Concerns:</strong> Enhancing inventory management systems, implementing expiration date tracking, and offering fresher products would mitigate concerns and build trust.</li>
+          <li><strong>Emphasize Customer Feedback:</strong> Actively seeking and responding to customer feedback demonstrates the brand's commitment to continuous improvement and customer satisfaction.</li>
+          <li><strong>Leverage Positive Reviews:</strong> Highlighting positive customer experiences through testimonials, social media, and marketing campaigns can strengthen brand credibility and attract new customers.</li>
+        </ul>
+      </details>
+    </div>
+    
+    <!-- Pilgrim Card -->
+    <div class="brand-card">
+      <h2>Brand Analysis: Pilgrim</h2>
+      <p><strong>Pilgrim</strong> – A beauty and personal care brand focused on effective, natural, and affordable products through its e-commerce platform.</p>
+      <details>
+        <summary><strong>Strengths</strong></summary>
+        <ul>
+          <li><strong>Positive Customer Reviews:</strong> Pilgrim receives generally favorable reviews, with customers appreciating its product quality and effectiveness.</li>
+          <li><strong>Wide Product Range:</strong> The brand offers a diverse selection of skincare, haircare, and body care products, catering to various skin and hair concerns.</li>
+          <li><strong>Natural and Healthy Ingredients:</strong> Pilgrim emphasizes the use of natural and plant-based ingredients in its formulations, appealing to eco-conscious consumers.</li>
+          <li><strong>User-friendly App:</strong> The Pilgrim app simplifies the shopping experience, offering easy navigation and quick checkout.</li>
+          <li><strong>Affordable Pricing:</strong> Pilgrim's products are priced competitively, making them accessible to a wide range of consumers.</li>
+        </ul>
+      </details>
+      <details>
+        <summary><strong>Weaknesses</strong></summary>
+        <ul>
+          <li><strong>Delivery Delays:</strong> Several reviews mention delayed or non-delivery of orders, impacting customer satisfaction.</li>
+          <li><strong>Poor Customer Service:</strong> Negative reviews indicate unresponsive customer support, slow response times, and unresolved inquiries.</li>
+          <li><strong>Product Quality Concerns:</strong> While many reviews praise product quality, some customers have raised concerns about inconsistent formulations or ineffective results.</li>
+          <li><strong>Limited Physical Availability:</strong> Pilgrim products are primarily available online, which may limit accessibility for customers who prefer in-store purchases.</li>
+          <li><strong>Technical App Issues:</strong> The Pilgrim app has received complaints about slow loading times, bugs, and occasional crashes.</li>
+        </ul>
+      </details>
+      <details>
+        <summary><strong>Exploitable Points</strong></summary>
+        <ul>
+          <li><strong>Improve Delivery Reliability:</strong> Partnering with reliable logistics providers and optimizing shipping processes can enhance delivery efficiency.</li>
+          <li><strong>Enhance Customer Service:</strong> Investing in responsive and efficient customer support can address negative feedback and improve brand perception.</li>
+          <li><strong>Maintain Consistent Product Quality:</strong> Implementing quality control measures and analyzing customer feedback can ensure consistent product performance.</li>
+          <li><strong>Expand Physical Presence:</strong> Exploring partnerships with retail stores or establishing physical outlets can increase brand visibility and accessibility.</li>
+          <li><strong>Optimize App Performance:</strong> Resolving technical issues and improving app loading times will boost user satisfaction and engagement.</li>
+        </ul>
+      </details>
+    </div>
+  </div>
+  <script>
+    function toggleMenu() {
+        document.getElementById("navMenu").classList.toggle("show");
+    }
+
+    // Set the Next button's URL
+    document.getElementById("nextPage").addEventListener("click", function() {
+        window.location.href = "eleven"; // Change this dynamically per page
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener("click", function(event) {
+        if (!event.target.closest(".menu-container")) {
+            document.getElementById("navMenu").classList.remove("show");
+        }
+    });
+</script>
+</body>
+</html>

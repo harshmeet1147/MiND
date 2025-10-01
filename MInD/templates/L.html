@@ -1,0 +1,298 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L30D Newest Category Arrivals</title>
+    <link href="https://unpkg.com/tabulator-tables@5.3.4/dist/css/tabulator.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/papaparse@5.3.2/papaparse.min.js"></script>
+    <script src="https://unpkg.com/tabulator-tables@5.3.4/dist/js/tabulator.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            /* background-color: #007bff; */
+            color: black;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .controls {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        select {
+            padding: 8px;
+            margin: 0 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        #table {
+            margin: auto;
+            max-width: 90%;
+            border-radius: 5px;
+            overflow: hidden;
+            background-color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Tabulator Styling */
+        .tabulator {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .tabulator-row {
+            transition: background 0.3s ease;
+        }
+
+        .tabulator-row:hover {
+            background-color: #e9f5ff !important;
+        }
+
+        .tabulator-header {
+            background-color: #007bff !important;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+    <style>
+        .nav-container {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            padding: 8px 12px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .nav-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .menu-container {
+            position: relative;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .menu {
+            display: none;
+            position: absolute;
+            top: 30px;
+            left: 0;
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .menu a {
+            display: block;
+            padding: 5px 10px;
+            text-decoration: none;
+            color: black;
+        }
+
+        .menu a:hover {
+            background: #f0f0f0;
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo" style="position: absolute; top: 20px; right: 20px;"><img src="{% static 'mlogo.png' %}" alt="Hive Logo" style="width: 160px; height: auto;"></div>
+    <div class="header">L30D Newest Category Arrivals</div>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="history.back()">Back</button>
+        <button class="nav-btn" id="nextPage">Next</button>
+    
+        <div class="menu-container">
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
+            <div class="menu" id="navMenu">
+                <a href="four">Web</a>
+                <hr>
+                <a href="seven">App</a>
+                <hr>
+                <a href="a">Amazon</a>
+                <hr>
+                <a href="qcom">Q-Comm</a>
+                
+            </div>
+        </div>
+    </div>
+    <div class="controls">
+        <label for="category">Category:</label>
+        <select id="category">
+            <option value="">All</option>
+        </select>
+        
+        <label for="brand">Brand:</label>
+        <select id="brand">
+            <option value="">All</option>
+        </select>
+        
+        <label for="month">Month:</label>
+        <select id="month">
+            <option value="">All</option>
+        </select>
+    </div>
+    
+    <div id="table"></div>
+
+    <script>
+        let table;
+
+        function fetchCSV(file) {
+            fetch(file)
+                .then(response => response.text())
+                .then(csvData => {
+                    Papa.parse(csvData, {
+                        header: true,
+                        dynamicTyping: true,
+                        complete: function(results) {
+                            populateFilters(results.data);
+                            createTable(results.data);
+                        }
+                    });
+                })
+                .catch(error => console.error("Error loading CSV file:", error));
+        }
+
+        function populateFilters(data) {
+            const brandSelect = document.getElementById("brand");
+            const monthSelect = document.getElementById("month");
+            const categorySelect = document.getElementById("category");
+
+            const brands = [...new Set(data.map(item => item.brand).filter(Boolean))];
+            const months = [...new Set(data.map(item => item.Month).filter(Boolean))];
+            const category = [...new Set(data.map(item => item.category).filter(Boolean))];
+            
+            brands.forEach(brand => {
+                let option = document.createElement("option");
+                option.value = brand;
+                option.textContent = brand;
+                brandSelect.appendChild(option);
+            });
+            
+            months.forEach(month => {
+                let option = document.createElement("option");
+                option.value = month;
+                option.textContent = month;
+                monthSelect.appendChild(option);
+            });
+            category.forEach(category => {
+                let option = document.createElement("option");
+                option.value = category;
+                option.textContent = category;
+                categorySelect.appendChild(option);
+            });
+        }
+
+        function createTable(data) {
+    table = new Tabulator("#table", {
+        data: data,
+        layout: "fitColumns",
+        height: "800px",
+        pagination: "local",
+        paginationSize: 30,
+        paginationSizeSelector: [20, 40, 60],
+        responsiveLayout: "hide",
+        columns: [
+            {title: "Year", field: "Year", sorter: "number", headerSort: true},
+            {title: "Month", field: "Month", sorter: "string", headerSort: true},
+            {title: "ASIN", field: "asin", sorter: "string", headerSort: false},
+            {title: "Brand", field: "brand", sorter: "string", headerSort: true},
+            {title: "Page Result", field: "pageResult", sorter: "number", headerSort: true},
+            {
+                title: "Price", 
+                field: "Price", 
+                sorter: "number", 
+                headerSort: true, 
+                formatter: "money",
+                formatterParams: {precision: 0}  // No decimals
+            },
+            {
+                title: "MRP", 
+                field: "Mrp", 
+                sorter: "number", 
+                headerSort: true, 
+                formatter: "money",
+                formatterParams: {precision: 0}  // No decimals
+            },
+            {title: "Title", field: "title", sorter: "string", headerSort: false, tooltip: true}
+        ],
+        rowFormatter: function(row) {
+            row.getElement().style.transition = "all 0.3s ease";
+        }
+    });
+}
+
+
+        document.getElementById("brand").addEventListener("change", function() {
+            table.setFilter("brand", "=", this.value || undefined);
+        });
+
+        document.getElementById("month").addEventListener("change", function() {
+            table.setFilter("Month", "=", this.value || undefined);
+        });
+
+        document.getElementById("category").addEventListener("change", function() {
+            table.setFilter("category", "=", this.value || undefined);
+        });
+
+        fetchCSV("/static/data/LL1.csv");
+    </script>
+    <script>
+        function toggleMenu() {
+            document.getElementById("navMenu").classList.toggle("show");
+        }
+    
+        // Set the Next button's URL
+        document.getElementById("nextPage").addEventListener("click", function() {
+            window.location.href = "l"; // Change this dynamically per page
+        });
+    
+        // Close menu when clicking outside
+        document.addEventListener("click", function(event) {
+            if (!event.target.closest(".menu-container")) {
+                document.getElementById("navMenu").classList.remove("show");
+            }
+        });
+    </script>
+</body>
+</html>

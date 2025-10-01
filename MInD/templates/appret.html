@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WOW App - Retention & Open Rates</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.0/dist/echarts.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f7f4; /* Off-white background */
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+        .chart-container {
+            width: 80%;
+            max-width: 900px;
+            height: 500px;
+            margin: auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>WOW App - Retention Rate & Open Rate (Daily)</h1>
+    <div id="qualityChart" class="chart-container"></div>
+
+    <script>
+        var chart = echarts.init(document.getElementById('qualityChart'));
+
+        var dayData = [];
+        var retentionRates = [];
+        var openRates = [];
+
+        function getRandomValue(base, range) {
+            return (base + Math.random() * range).toFixed(2);
+        }
+
+        function getFormattedDate(daysAgo) {
+            var date = new Date();
+            date.setDate(date.getDate() - daysAgo);
+            return date.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+        }
+
+        function updateData() {
+            if (dayData.length > 30) {
+                dayData.shift();
+                retentionRates.shift();
+                openRates.shift();
+            }
+
+            let newDate = getFormattedDate(0);
+            if (!dayData.includes(newDate)) {
+                dayData.push(newDate);
+                retentionRates.push(getRandomValue(40, 5)); // Retention between 40%-45%
+                openRates.push(getRandomValue(50, 10)); // Open rate between 50%-60%
+
+                chart.setOption({
+                    xAxis: { data: dayData },
+                    series: [
+                        { data: retentionRates },
+                        { data: openRates }
+                    ]
+                });
+            }
+        }
+
+        for (let i = 10; i >= 0; i--) {
+            dayData.push(getFormattedDate(i));
+            retentionRates.push(getRandomValue(40, 5));
+            openRates.push(getRandomValue(50, 10));
+        }
+
+        var option = {
+            title: {
+                text: 'Daily Retention & Open Rates',
+                left: 'center',
+                textStyle: { fontSize: 18, fontWeight: 'bold', color: '#333' }
+            },
+            tooltip: { trigger: 'axis' },
+            xAxis: {
+                type: 'category',
+                data: dayData,
+                axisLine: { lineStyle: { color: '#888' } },
+                axisLabel: { rotate: 45 }
+            },
+            yAxis: {
+                type: 'value',
+                axisLine: { lineStyle: { color: '#888' } },
+                splitLine: { lineStyle: { color: '#eee' } },
+                axisLabel: { formatter: '{value}%' }
+            },
+            legend: {
+                data: ['Retention Rate', 'Open Rate'],
+                top: '10%'
+            },
+            series: [
+                {
+                    name: 'Retention Rate',
+                    type: 'line',
+                    data: retentionRates,
+                    smooth: true,
+                    lineStyle: { color: '#007bff', width: 3 },
+                    itemStyle: { color: '#007bff' },
+                    areaStyle: { color: 'rgba(0, 123, 255, 0.2)' }
+                },
+                {
+                    name: 'Open Rate',
+                    type: 'line',
+                    data: openRates,
+                    smooth: true,
+                    lineStyle: { color: '#28a745', width: 3 },
+                    itemStyle: { color: '#28a745' },
+                    areaStyle: { color: 'rgba(40, 167, 69, 0.2)' }
+                }
+            ],
+            animationDuration: 2000
+        };
+
+        chart.setOption(option);
+        setInterval(updateData, 5000);
+    </script>
+
+</body>
+</html>

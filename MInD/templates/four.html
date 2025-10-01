@@ -1,0 +1,309 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Health (Web Traffic)    </title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.0/echarts.min.js"></script>
+    <style>
+        .nav-container {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            padding: 8px 12px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .nav-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .menu-container {
+            position: relative;
+        
+        }
+        
+
+        .menu-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .menu {
+            display: none;
+            position: absolute;
+            top: 30px;
+            
+            left: 0;
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            padding: 10px;
+            overflow: scroll;
+        }
+
+        .menu a {
+            display: block;
+            padding: 5px 10px;
+            text-decoration: none;
+            color: black;
+        }
+
+        .menu a:hover {
+            background: #f0f0f0;
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
+    <style>
+        body {
+            background-color: #f8f8f8;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            
+        }
+        .header {
+            text-align: center;
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .filter-container {
+            margin-top: 12px;
+            font-size: 15px;
+            font-weight: bold;
+        }
+        select {
+            padding: 8px;
+            font-size: 14px;
+        }
+        .chart-container {
+            width: 80%;
+            height: 700px;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+    </style>
+    <style>
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            border-radius: 8px;
+        }
+    
+        .popup-content {
+            position: relative;
+        }
+    
+        .close-btn {
+    position: fixed;
+    top: 0px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 40px;
+    font-weight: bold;
+    color: black;
+    background: none;
+    border: none;
+    outline: none;
+}
+
+.close-btn:hover {
+    color: red;
+}
+    </style>
+</head>
+<body>
+    <div class="logo" style="position: absolute; top: 20px; right: 20px;"><img src="{% static 'mlogo.png' %}" alt="Hive Logo" style="width: 160px; height: auto;"></div>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="history.back()">Back</button>
+        <button class="nav-btn" id="nextPage">Next</button>
+        <button class="nav-btn" id="insightsBtn">Insights</button>
+        <div id="insightsPopup" class="popup">
+            <div class="popup-content">
+                <span class="close-btn" onclick="closePopup()">&times;</span>
+                <p><strong>BuyWOW:</strong> BuyWOW has high visitor traffic (~150K+ monthly visitors) but declining visit duration (110s → 82s → 107s) and rising bounce rates (32% → 42%), suggesting users are dropping off faster. High reliance on direct (20%+) and organic search traffic (21-30%) implies strong brand recognition, but low engagement hints at friction in user experience or weaker product discovery.</p>  
+
+<p><strong>Minimalist:</strong> Minimalist’s traffic is largely organic-driven (25%+), showing strong brand trust. However, if paid search (19-22%) isn’t translating into engagement, the issue could be low purchase urgency or lack of conversion incentives. Simplifying decision-making through bundles or guided recommendations may help.</p>  
+
+<p><strong>Pilgrim:</strong> Pilgrim has notable social traffic (~15-25%), indicating strong influencer or content-driven pull. But if visitor retention is weak, it suggests interest isn’t converting into action. Strengthening post-click engagement through better storytelling, trials, or loyalty programs may improve conversion.</p>
+
+
+
+            </div>
+        </div>
+    
+        <div class="menu-container">
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
+            <div class="menu" id="navMenu">
+                <a href="four">Web</a>
+                <hr>
+                <a href="seven">App</a>
+                <hr>
+                <a href="a">Amazon</a>
+                <hr>
+                <a href="qcom">Q-Comm</a>
+                
+            </div>
+        </div>
+    </div>
+    
+
+    
+
+    </div>
+    <div class="filter-container">
+        <div class="header">Comparison Of Website Traffic Between Brands</div>
+        <label for="visitorType">Select Visitor Type:</label>
+        <select id="visitorType" onchange="updateChart()">
+            <option value="total">Total Visitors</option>
+            <option value="unique">Unique Visitors</option>
+        </select>
+    </div>
+    
+
+    <style>
+        .chart-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            position: relative;
+        }
+
+        #lukrative-box {
+            width: 25%;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        h3 {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+        }
+    </style>
+
+    <div class="chart-container">
+        <div id="chart" style="width: 100%; height: 100%;"></div>
+    </div>
+
+    <script>
+        var chart = echarts.init(document.getElementById('chart'));
+        var months = ['Oct\'24', 'Nov\'24', 'Dec\'24', 'Jan\'24', 'Feb\'24'];
+        var visitorData = {
+            'buywow': { total: [154587, 167394, 154412, 169407, 153090], unique: [110419, 119567, 110294, 121005, 109350] },
+            'pilgrim': { total: [682223, 681041, 563626, 635082, 651227], unique: [487302, 486458, 402590, 453630, 465162] },
+            'minimalist': { total: [993597, 1102088, 923086, 907308, 860324], unique: [709712, 787206, 659347, 648077, 614517] }
+        };
+        
+        function getMinMaxAnnotations(data) {
+            let minIndex = data.indexOf(Math.min(...data));
+            let maxIndex = data.indexOf(Math.max(...data));
+            return [
+                { coord: [months[minIndex], data[minIndex]], symbol: 'circle', symbolSize: 10, itemStyle: { color: 'red' } },
+                { coord: [months[maxIndex], data[maxIndex]], symbol: 'circle', symbolSize: 10, itemStyle: { color: 'green' } }
+            ];
+        }
+
+        function getSeries(type) {
+            let series = [];
+            Object.keys(visitorData).forEach(brand => {
+                series.push({
+                    name: `${brand}`,
+                    type: 'line',
+                    data: visitorData[brand][type],
+                    smooth: true,
+                    lineStyle: { width: 3 },
+                    markPoint: { data: getMinMaxAnnotations(visitorData[brand][type]) }
+                });
+            });
+            return series;
+        }
+
+        function updateChart() {
+            let type = document.getElementById('visitorType').value;
+            let legendData = Object.keys(visitorData);
+            
+            let option = {
+                title: { text: 'Brand Visitors - Monthly Trends', left: 'center', top: 10, textStyle: { fontSize: 20, fontWeight: 'bold' } },
+                tooltip: { trigger: 'axis' },
+                legend: { data: legendData, bottom: 0, textStyle: { fontSize: 20 } },
+                toolbox: { feature: { dataZoom: { show: true }, restore: { show: true }, saveAsImage: { show: true } } },
+                xAxis: { type: 'category', data: months, name: 'Month' },
+                yAxis: { type: 'value', name: 'Visitors' },
+                series: getSeries(type)
+            };
+
+            chart.setOption(option, true);
+        }
+
+        updateChart();
+        window.addEventListener('resize', () => chart.resize());
+    </script>
+<script>
+    function toggleMenu() {
+        document.getElementById("navMenu").classList.toggle("show");
+    }
+
+    
+    // Set the Next button's URL
+    document.getElementById("nextPage").addEventListener("click", function() {
+        window.location.href = "five"; // Change dynamically per page
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener("click", function(event) {
+        if (!event.target.closest(".menu-container")) {
+            document.getElementById("navMenu").classList.remove("show");
+        }
+    });
+
+    // Show Insights Popup
+    document.getElementById("insightsBtn").addEventListener("click", function() {
+        document.getElementById("insightsPopup").style.display = "block";
+    });
+
+    // Close Insights Popup
+    function closePopup() {
+        document.getElementById("insightsPopup").style.display = "none";
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,308 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Store Reviews Analysis</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.6;
+    }
+    h1 {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+    .analysis-container {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      max-width: 1200px;
+      width: 100%;
+      margin-bottom: 30px;
+    }
+    .analysis-card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      width: 48%;
+      transition: transform 0.3s ease-in-out;
+      overflow-y: auto;
+      max-height: 80vh;
+    }
+    .analysis-card:hover {
+      transform: scale(1.02);
+    }
+    .analysis-card h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .analysis-card h3 {
+      color: #555;
+      margin-top: 15px;
+      margin-bottom: 10px;
+    }
+    .analysis-card p {
+      font-size: 14px;
+      color: #555;
+      margin: 5px 0;
+    }
+    .analysis-card ol,
+    .analysis-card ul {
+      margin-left: 20px;
+      margin-bottom: 10px;
+    }
+    details {
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+      background-color: #f9f9f9;
+    }
+    details summary {
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      outline: none;
+    }
+    details[open] summary {
+      color: #007BFF;
+    }
+    .source-container {
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 80%;
+      max-width: 800px;
+    }
+    .source-container h3 {
+      margin-bottom: 10px;
+      color: #333;
+    }
+    .source-container p {
+      font-size: 14px;
+      color: #555;
+    }
+    @media (max-width: 1000px) {
+      .analysis-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      .analysis-card {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Store Reviews Analysis</h1>
+  <div class="analysis-container">
+    <!-- Card 1: Comprehensive Opportunities Summary -->
+    <div class="analysis-card">
+      <h2>Final Comprehensive Opportunities Summary</h2>
+      <h3>Summary of Key Opportunities for Lenskart Against Competitors</h3>
+      <p>Click on each point to view its detailed explanation:</p>
+      <ol>
+        <li>
+          <details>
+            <summary>Exceptional Customer Service</summary>
+            <p>Customers consistently praise Lenskart's helpful, knowledgeable, and professional staff. This focus on customer satisfaction should be prioritized to maintain a competitive advantage.</p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>Wide Product Variety and Customization</summary>
+            <p>Lenskart offers a vast selection of frames and lenses, allowing customers to find the perfect fit for their style and needs. Emphasizing this diversity and offering customization options can set Lenskart apart.</p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>Competitive Pricing</summary>
+            <p>While maintaining high product quality, Lenskart's competitive pricing makes eyewear more accessible to a wider range of customers, attracting value-conscious buyers.</p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>Convenient and Accessible Services</summary>
+            <p>Lenskart's extensive network of stores, online presence, and free home eye testing service provide convenience and accessibility, outpacing competitors.</p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>Positive Brand Reputation</summary>
+            <p>Numerous positive customer reviews and a strong online presence have established Lenskart as a trusted and reliable brand, attracting new customers and building loyalty.</p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>Skilled Staff and Patient Care</summary>
+            <p>Lenskart's optometrists and staff are highly skilled and provide personalized advice and recommendations, creating a patient-centric approach.</p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>Free Services and Value-Added Benefits</summary>
+            <p>Free eye exams, contact lens trials, and other value-added services enhance customer satisfaction and drive loyalty.</p>
+          </details>
+        </li>
+      </ol>
+      <p>By capitalizing on these strengths and continuing to focus on providing excellent customer experiences, Lenskart can effectively differentiate itself from competitors and maintain its leadership in eyewear and eye care services.</p>
+    </div>
+
+    <!-- Card 2: Comprehensive General Review Summary -->
+    <div class="analysis-card">
+      <h2>Final Comprehensive General Review Summary</h2>
+      <h3>Final Summary of General Review Analysis</h3>
+      <p>Click on each point to view its detailed explanation:</p>
+      
+      <h3>Common Themes</h3>
+      <ul>
+        <li>
+          <details>
+            <summary>Exceptional Customer Service</summary>
+            <p>Reviewers consistently highlight the friendly, knowledgeable, and attentive staff at Lenskart.</p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>High-Quality Products and Services</summary>
+            <p>Customers are satisfied with the durable eyewear products and efficient eye testing services.</p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>Wide Product Selection</summary>
+            <p>The extensive variety of eyewear options—including frames, sunglasses, and lenses—caters to diverse customer needs.</p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>Positive In-Store and Online Experience</summary>
+            <p>Customers appreciate the comfortable environments in Lenskart stores and the user-friendly website.</p>
+          </details>
+        </li>
+      </ul>
+      
+      <h3>Strengths</h3>
+      <ul>
+        <li>
+          <details>
+            <summary>Excellent Customer Service</summary>
+            <p>Trained and dedicated staff provide personalized assistance, creating positive experiences.</p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>High-Quality Products</summary>
+            <p>Durable and stylish eyewear products exceed customer expectations and enhance satisfaction.</p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>Streamlined Processes</summary>
+            <p>Efficient eye testing and order fulfillment minimize wait times and improve convenience.</p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>Comfortable Experience</summary>
+            <p>Inviting store environments and a user-friendly website enhance the overall shopping experience.</p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>Strong Brand Reputation</summary>
+            <p>Consistent positive reviews build a reliable brand image and foster customer trust.</p>
+          </details>
+        </li>
+      </ul>
+      
+      <h3>Weaknesses</h3>
+      <ul>
+        <li>
+          <details>
+            <summary>Occasional Negative Experiences</summary>
+            <p>Isolated cases of rude or unhelpful staff can impact customer satisfaction.</p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>Inconsistent Service Across Locations</summary>
+            <p>Variations in service quality between different Lenskart stores have been reported.</p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>Stock Limitations</summary>
+            <p>Limited availability of certain frame styles or sizes may disappoint some customers.</p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>Website Usability Issues</summary>
+            <p>Some customers have encountered technical glitches or navigation difficulties on the website.</p>
+          </details>
+        </li>
+      </ul>
+      
+      <h3>Key Insights</h3>
+      <ul>
+        <li>
+          <details>
+            <summary>Staff Training and Support</summary>
+            <p>Investing in staff training and support is crucial for maintaining exceptional service.</p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>Product Quality and Variety</summary>
+            <p>Ensuring high product quality and a wide range of options boosts customer satisfaction and loyalty.</p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>Process Streamlining</summary>
+            <p>Improving processes can reduce wait times and enhance operational efficiency.</p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>Customer Feedback Monitoring</summary>
+            <p>Regularly monitoring feedback and addressing issues promptly protects the brand reputation.</p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>Staff Recognition</summary>
+            <p>Recognizing exceptional staff performance can motivate employees and further enhance customer experience.</p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>Addressing Stock and Website Issues</summary>
+            <p>Resolving stock limitations and website usability problems can help prevent customer dissatisfaction.</p>
+          </details>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Sources Card -->
+  <div class="source-container">
+    <h3>Sources</h3>
+    <p>GMB stores all over India</p>
+  </div>
+</body>
+</html>

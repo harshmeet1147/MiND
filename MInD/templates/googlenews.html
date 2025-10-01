@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Competitor Analysis</title>
+    <style>
+               .navigation {
+    margin: 20px 0;
+}
+.navigation {
+            position: absolute;
+            width: 100%;
+            bottom: 0px;
+            display: flex;
+            justify-content: center;
+            gap: 70px;
+
+            
+        }
+        .nav-button {
+            font-size: 60px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #007BFF;
+        }
+        .nav-button:hover {
+            color: #0056b3;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .competitor-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            max-width: 1200px;
+            width: 100%;
+            flex-wrap: nowrap;
+        }
+
+        .competitor-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            width: 32%;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .competitor-card:hover {
+            transform: scale(1.05);
+        }
+
+        .competitor-card h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .competitor-card ul {
+            list-style: none;
+            padding: 0;
+            flex-grow: 1;
+        }
+
+        .competitor-card ul li {
+            background: #f9f9f9;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .source-container {
+            margin-top: 30px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 80%;
+            max-width: 800px;
+            height: 100px;
+        }
+
+        .source-container h3 {
+            margin-bottom: 10px;
+        }
+
+        .source-container p {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 1000px) {
+            .competitor-container {
+                flex-wrap: wrap;
+            }
+
+            .competitor-card {
+                width: 48%;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .competitor-card {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Competitor Analysis</h1>
+    
+    
+    <div class="competitor-container">
+        <div class="competitor-card">
+            <h2>Pilgrim</h2>
+            <ul>
+                <li><b>Brand Focus:</b> Hair care, skincare, makeup; D2C & offline expansion.</li>
+                <li><b>Funding & Growth:</b> $9M-$20M Series B; break-even target; Rs 1,000 cr goal.</li>
+                <li><b>Market Strategy:</b> Multi-channel (asset-light), celebrity endorsements.</li>
+                <li><b>Strategic Initiatives:</b> Offline retail expansion, R&D investment, global trends.</li>
+            </ul>
+        </div>
+
+        <div class="competitor-card">
+            <h2>Wow Skin Science</h2>
+            <ul>
+                <li><b>Brand Focus:</b> Hair care, skincare, cosmetics; innovation-driven.</li>
+                <li><b>Funding & Growth:</b> Significant revenue (e.g., Rs 233.5 cr FY24); new funding efforts; profitability by 2025.</li>
+                <li><b>Market Strategy:</b> Extensive digital and offline presence; international expansion.</li>
+                <li><b>Strategic Initiatives:</b> Product diversification, tech-enabled marketing, retail partnerships.</li>
+            </ul>
+        </div>
+
+        <div class="competitor-card">
+            <h2>Minimalist</h2>
+            <ul>
+                <li><b>Brand Focus:</b> Premium skincare & hair care; high-quality, ingredient-focused.</li>
+                <li><b>Funding & Growth:</b> Acquisition-driven; deal around Rs 3,000 cr; strong revenue growth.</li>
+                <li><b>Market Strategy:</b> Premium positioning; strategic acquisition by HUL.</li>
+                <li><b>Strategic Initiatives:</b> Leveraging HUL’s network for broader market reach and portfolio enhancement.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="source-container">
+        <h3>Sources</h3>
+        <p>
+            indianretailer.com | economictimes.com | startupnews.fyi | entrackr.com | businesswire.com |
+            livemint.com | afaqs.com | financialexpress.com | indiantelevision.com | trendhunter.com |
+            campaignindia.in | adgully.com | passionateinmarketing.com | business-standard.com |
+            yourstory.com | outlookbusiness.com | ndtv.com
+        </p>
+        
+    </div>
+    <div class="navigation">
+        <button class="nav-button" onclick="goBack()">&#8592;</button>
+        <button class="nav-button" onclick="goNext()">&#8594;</button>
+    </div>
+<script>
+    function goHome() {
+    window.location.href = 'cat';
+}
+
+function goBack() {
+    window.history.back();
+}
+
+function goNext() {
+    window.location.href = 'EngagementRates';
+}
+</script>
+</body>
+</html>

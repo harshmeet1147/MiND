@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOM SKU-Wise Share Movement</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <style>
+        .controls { text-align: center; margin-bottom: 20px; font-size: 16px; }
+        body { font-family: Arial, sans-serif; background-color: #f8f9fa; margin: 0; }
+        .header { text-align: center; padding: 20px; font-size: 24px; font-weight: bold; }
+        .chart-container { display: flex; justify-content: center; gap: 20px; }
+        .chart { width: 1500px; height: 950px; background: white; padding: 10px; border-radius: 15px; box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.2);margin: 15px; }
+    </style>
+    <style>
+        .nav-container {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            padding: 8px 12px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .nav-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .menu-container {
+            position: relative;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .menu {
+            display: none;
+            position: absolute;
+            top: 30px;
+            left: 0;
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .menu a {
+            display: block;
+            padding: 5px 10px;
+            text-decoration: none;
+            color: black;
+        }
+
+        .menu a:hover {
+            background: #f0f0f0;
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">MOM SKU-Wise Share Movement</div>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="history.back()">Back</button>
+        <button class="nav-btn" id="nextPage">Next</button>
+    
+        <div class="menu-container">
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
+            <div class="menu" id="navMenu">
+                <a href="four">Brand Health (Web Traffic)</a>
+                <hr>
+                <a href="five">Brand Health (Web Traffic) Channel-Wise</a>
+                <hr>
+                <a href="six">Brand Health (Web Engagement)</a>
+                <hr>
+                <a href="seven">Brand Health (App Traffic)</a>
+                <hr>
+                <a href="eight">Brand Health (App Engagement)</a>
+                <hr>
+                <a href="nine">Brand Health (App Sentiment)</a>
+                <hr>
+                <a href="ten">Playstore App Analysis</a>
+                <hr>
+                <a href="eleven">Social Media (Engagement)</a>
+                <hr>
+                <a href="twelve">Social Media (Sentiment)</a>
+                <hr>
+                <a href="one">L30 Brand-Wise SKU & BSR Distribution</a>
+                <hr>
+                <a href="two">Demand Concentration By Price Bucket</a>
+                <hr>
+                <a href="three">Consolidated Brand Presence By BSR & Price</a>
+            </div>
+        </div>
+    </div>
+    <div class="controls">
+        <label for="category"><b>Category:</b></label>
+        <select id="category">
+            <option>Water Purifier</option>
+        </select>
+    </div>
+
+    <div class="chart-container">
+        <div id="revenue-chart" class="chart"></div>
+        <div id="sales-chart" class="chart"></div>
+    </div>
+
+    <script>
+        let chartRevenue = echarts.init(document.getElementById("revenue-chart"));
+        let chartSales = echarts.init(document.getElementById("sales-chart"));
+        let allData = { revenue: [], sales: [] };
+
+        function fetchCSV(url) {
+            return fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    return data.split("\n")
+                        .slice(1) // Skip headers
+                        .map(row => row.split(","))
+                        .filter(row => row.length === 3 && row[0] && row[1] && row[2])
+                        .map(row => {
+                            let [day, month, year] = row[2].trim().split("-");
+                            return { asin: row[0].trim(), value: Number(row[1]), date: `${year}-${month}` };
+                        });
+                })
+                .catch(error => console.error("Error fetching CSV:", error));
+        }
+
+        function loadData() {
+            Promise.all([fetchCSV("/static/data/c1.csv"), fetchCSV("/static/data/c2.csv")])
+                .then(([revenueData, salesData]) => {
+                    allData.revenue = revenueData;
+                    allData.sales = salesData;
+                    createChart(chartRevenue, revenueData, "MOM Revenue Performance By ASIN", "revenue");
+                    createChart(chartSales, salesData, "MOM Units Performance By ASIN", "sales");
+                })
+                .catch(error => console.error("Error loading data:", error));
+        }
+
+        function createChart(chart, data, title, type) {
+            let formattedData = data.map(d => [d.date, d.value, d.asin]);
+            let uniqueAsins = [...new Set(data.map(d => d.asin))];
+
+            let option = {
+                title: { text: title, left: "center" },
+                tooltip: { 
+                    trigger: "item",
+                    formatter: params => `${params.data[0]}<br/><b>${params.data[2]}</b>: ${params.data[1].toFixed(2)}B`
+                },
+                legend: {
+                    type: "scroll",
+                    orient: "horizontal",
+                    bottom: 10,
+                    data: uniqueAsins
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        saveAsImage: { show: true },
+                        dataZoom: { show: true },
+                        restore: { show: true },
+                        magicType: { show: true, type: ["line", "bar", "stack", "tiled"] }
+                    }
+                },
+                singleAxis: { type: "time", bottom: 50 },
+                series: [{
+                    type: "themeRiver",
+                    data: formattedData,
+                    label: { show: false, position: "right", color: "#000", fontSize: 12 },
+                    emphasis: { itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: "rgba(0, 0, 0, 0.5)" } }
+                }]
+            };
+
+            chart.setOption(option);
+
+            chart.on("click", function(params) {
+                if (params.seriesType === "themeRiver") {
+                    let clickedAsin = params.data[2];
+                    highlightAsin(clickedAsin);
+                }
+            });
+        }
+
+        function highlightAsin(asin) {
+            ["revenue", "sales"].forEach(type => {
+                let chart = type === "revenue" ? chartRevenue : chartSales;
+                let data = allData[type].map(d => [d.date, d.value, d.asin]);
+                
+                let option = chart.getOption();
+                option.series[0].data = data.map(d => 
+                    d[2] === asin ? [d[0], d[1] * 1.1, d[2]] : [d[0], d[1] * 0.5, d[2]]
+                );
+
+                chart.setOption(option);
+            });
+        }
+
+        loadData();
+    </script>
+    <script>
+        function toggleMenu() {
+            document.getElementById("navMenu").classList.toggle("show");
+        }
+    
+        // Set the Next button's URL
+        document.getElementById("nextPage").addEventListener("click", function() {
+            window.location.href = "d"; // Change this dynamically per page
+        });
+    
+        // Close menu when clicking outside
+        document.addEventListener("click", function(event) {
+            if (!event.target.closest(".menu-container")) {
+                document.getElementById("navMenu").classList.remove("show");
+            }
+        });
+    </script>
+</body>
+</html>

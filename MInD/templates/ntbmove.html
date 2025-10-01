@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NTB Movement</title>
+    
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+        #chart {
+            width: 1300px;
+            height: 500px;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 0px 0px rgba(0, 0, 0, 0.15);
+            padding: 10px;
+        }
+        .navigation {
+    margin: 20px 0;
+}
+
+/* .navigation button {
+    padding: 12px 18px;
+    margin: 10px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    background: linear-gradient(135deg, #007bff, #00d4ff);
+    color: white;
+    font-weight: bold;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+}
+
+.navigation button:hover {
+    background: linear-gradient(135deg, #0056b3, #00a1c9);
+    transform: scale(1.1);
+}
+ */
+.nav-menu {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    z-index: 1000;
+}
+.nav-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: none;
+    background: white;
+    position: absolute;
+    top: 30px;
+    left: 0;
+    width: 220px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.nav-menu:hover ul {
+    display: block;
+}
+.nav-menu ul li {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+.nav-menu ul li a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+    font-weight: bold;
+    
+}
+.navigation {
+            position: absolute;
+            width: 100%;
+            bottom: 0px;
+            display: flex;
+            justify-content: center;
+            gap: 70px;
+
+            
+        }
+        .nav-button {
+            font-size: 60px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #007BFF;
+        }
+        .nav-button:hover {
+            color: #0056b3;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+</head>
+<body>
+    <div class="nav-menu">
+        ☰ Menu
+        <ul>
+            <li><a href="http://127.0.0.1:8000/brandsearch">Brand Strength Overview</a></li>
+            <li><a href="#customer-affinity">Customer Affinity Overview</a></li>
+            <li><a href="#brand-performance">Brand Performance Overview</a></li>
+            <li><a href="#website-summary">Website Summary</a></li>
+            <li><a href="#app-summary">App Summary</a></li>
+            <li><a href="#retail">Retail - Divert to Mind V3</a></li>
+            <li><a href="#store">Store</a></li>
+            <li><a href="#media-funnel">Media Funnel (Overall & By Platform)</a></li>
+            <li><a href="#broad-market">Broad Market Movements (Euromonitor)</a></li>
+            <li><a href="#brand-shares">Brand Shares Overall & Online (Euromonitor)</a></li>
+            <li><a href="#new-launches">New Launches Tracking</a></li>
+            <li><a href="#news-summary">News & Summary</a></li>
+        </ul>
+    </div>
+    <h1>Kaustav to Share the format for NTB Movement </h1>
+    <div class="navigation">
+        <button class="nav-button" onclick="goBack()">&#8592;</button>
+        <button class="nav-button" onclick="goNext()">&#8594;</button>
+    </div>
+    <!-- <div id="chart"></div> -->
+
+    <script>
+        let data = [
+    { "Date": "2025-01-01", "noofconversations": 47 },
+    { "Date": "2025-01-02", "noofconversations": 52 },
+    { "Date": "2025-01-03", "noofconversations": 28 },
+    { "Date": "2025-01-04", "noofconversations": 25 },
+    { "Date": "2025-01-05", "noofconversations": 38 },
+    { "Date": "2025-01-06", "noofconversations": 24 },
+    { "Date": "2025-01-07", "noofconversations": 47 },
+    { "Date": "2025-01-08", "noofconversations": 25 },
+    { "Date": "2025-01-09", "noofconversations": 56 },
+    { "Date": "2025-01-10", "noofconversations": 33 },
+    { "Date": "2025-01-11", "noofconversations": 37 },
+    { "Date": "2025-01-12", "noofconversations": 20 },
+    { "Date": "2025-01-13", "noofconversations": 23 },
+    { "Date": "2025-01-14", "noofconversations": 34 },
+    { "Date": "2025-01-15", "noofconversations": 40 },
+    { "Date": "2025-01-16", "noofconversations": 35 },
+    { "Date": "2025-01-17", "noofconversations": 52 },
+    { "Date": "2025-01-18", "noofconversations": 53 },
+    { "Date": "2025-01-19", "noofconversations": 48 },
+    { "Date": "2025-01-20", "noofconversations": 20 },
+    { "Date": "2025-01-21", "noofconversations": 30 },
+    { "Date": "2025-01-22", "noofconversations": 29 },
+    { "Date": "2025-01-23", "noofconversations": 58 },
+    { "Date": "2025-01-24", "noofconversations": 23 },
+    { "Date": "2025-01-25", "noofconversations": 55 },
+    { "Date": "2025-01-26", "noofconversations": 46 },
+    { "Date": "2025-01-27", "noofconversations": 55 },
+    { "Date": "2025-01-28", "noofconversations": 32 },
+    { "Date": "2025-01-29", "noofconversations": 52 },
+    { "Date": "2025-01-30", "noofconversations": 50 }
+];
+
+    
+        let dates = data.map(item => item.Date);
+        let conversations = data.map(item => item.noofconversations);
+    
+        let chart = echarts.init(document.getElementById('chart'));
+    
+        let option = {
+            title: {
+                text: 'Number of Mentions and Comments Over Time',
+                left: 'center',
+                textStyle: {
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    color: '#333'
+                }
+            },
+            tooltip: {
+                trigger: "axis",
+                backgroundColor: "rgba(50,50,50,0.7)",
+                textStyle: { color: "#fff" }
+            },
+            legend: {
+                data: ["Conversations"],
+                right: 120
+            },
+            grid: {
+                left: '8%',
+                right: '8%',
+                bottom: '12%'
+            },
+            xAxis: {
+                type: "category",
+                data: dates,
+                axisLabel: { rotate: 45 }
+            },
+            yAxis: {
+                type: "value",
+                name: "Conversations",
+                splitLine: { show: true }
+            },
+            dataZoom: [
+                {
+                    type: 'inside',
+                    start: 0,
+                    end: 100
+                },
+                {
+                    type: 'slider',
+                    show: true,
+                    bottom: 0
+                },
+                {
+                    type: 'select',
+                    start: 0,
+                    end: 100
+                }
+            ],
+            toolbox: {
+                show: true,
+                feature: {
+                    dataZoom: { show: true },
+                    restore: { show: true },
+                    saveAsImage: { show: true }
+                }
+            },
+            series: [
+                {
+                    name: "Conversations",
+                    type: "line",
+                    data: conversations,
+                    smooth: true,
+                    lineStyle: { width: 3 }
+                }
+            ],
+            animationDuration: 1000
+        };
+    
+        chart.setOption(option);
+    
+        chart.on('dataZoom', function () {
+    let dataZoom = chart.getModel().option.dataZoom[0]; // Get dataZoom properties
+    let startIndex = dataZoom.startValue || 0;  // Get start index
+    let endIndex = dataZoom.endValue || conversations.length - 1; // Get end index
+
+    let selectedData = conversations.slice(startIndex, endIndex + 1);
+    let avgValue = selectedData.length > 0 ? 
+        (selectedData.reduce((sum, val) => sum + val, 0) / selectedData.length).toFixed(2) 
+        : 0;
+
+    chart.setOption({
+        title: {
+            subtext: `Average Conversations: ${avgValue}`,
+            subtextStyle: {
+                fontSize: 16,   // Increase font size
+                fontWeight: 'bold', // Make it bold
+                color: '#333'   // Optional: Adjust color if needed
+            }
+        }
+    });
+});
+
+    
+        function goBack() {
+            window.history.back();
+        }
+    
+        function goNext() {
+            window.location.href = 'appsummary';
+        }
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!-- templates/flipkart_login.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Flipkart Login</title>
+  <script src="https://static-assets-web.flixcart.com/fk-p-pegasus/oauth-client-sdk.0.0.4.js"></script>
+</head>
+<body>
+  <h3>Login to Flipkart</h3>
+  <button id="fk-login-btn">Connect with Flipkart</button>
+  <div id="fkAdsLoginWrapper"></div>
+
+  <script type="module">
+    document.getElementById('fk-login-btn').addEventListener('click', () => {
+      new FKOAuthClient({
+        clientId: '{{ client_id }}',
+        redirectUri: '{{ redirect_uri }}',
+        element: 'fkAdsLoginWrapper',
+        onSuccess: (data) => {
+          fetch('/flipkart/exchange-token/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ code: data.code })
+          })
+          .then(res => res.json())
+          .then(data => {
+            alert("Token received, check console.");
+            console.log("Access Token Response:", data);
+          })
+          .catch(err => console.error(err));
+        },
+        onError: (error) => {
+          console.error("Login Error:", error);
+        }
+      }).init();
+    });
+  </script>
+</body>
+</html>

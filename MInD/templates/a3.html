@@ -1,0 +1,152 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MInD</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-cloud/build/d3.layout.cloud.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .chart-container {
+            width: 45%;
+            display: inline-block;
+            vertical-align: top;
+        }
+        .wordcloud-container {
+            width: 90%;
+            margin: auto;
+        }
+        .chart {
+            width: 100%;
+            height: 400px;
+        }
+        .header {
+            text-align: center;
+            padding: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            /* background-color: #4CAF50; */
+            color: black;
+            border-radius: 5px;
+        }
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+    </style>
+    <style>
+        .nav-container {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            padding: 8px 12px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .nav-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .menu-container {
+            position: relative;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .menu {
+            display: none;
+            position: absolute;
+            top: 30px;
+            left: 0;
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .menu a {
+            display: block;
+            padding: 5px 10px;
+            text-decoration: none;
+            color: black;
+        }
+
+        .menu a:hover {
+            background: #f0f0f0;
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo" style="position: absolute; top: 20px; right: 20px;"><img src="{% static 'mlogo.png' %}" alt="Hive Logo" style="width: 160px; height: auto;"></div>
+    <div class="header">Sentiment Overview</div>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="history.back()">Back</button>
+        <button class="nav-btn" id="nextPage">Next</button>
+        <div class="menu-container">
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
+            <div class="menu" id="navMenu">
+                <a href="four">Web</a>
+                <hr>
+                <a href="seven">App</a>
+                <hr>
+                <a href="a">Amazon</a>
+                <hr>
+                <a href="qcom">Q-Comm</a>
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="powerbi-container">
+         <!-- <iframe title="Multivitamins for Centrum" width="2200" height="1000" src="https://app.powerbi.com/view?r=eyJrIjoiMzMyODM3MjUtOGNkMS00ODBjLTg0YjktYmM4MjZlZGNhNmY3IiwidCI6ImFiMWM5NTBhLTE1MDAtNDUxOC1hOGQyLTBlZmM5NmUxZTJmOCJ9&pageName=ReportSection375ccaab5d33bb28bd04" frameborder="0" allowFullScreen="true"></iframe> -->
+         <!-- <iframe title="Multivitamins for Centrum" width="2200" height="1000" src="https://app.powerbi.com/view?r=eyJrIjoiMzMyODM3MjUtOGNkMS00ODBjLTg0YjktYmM4MjZlZGNhNmY3IiwidCI6ImFiMWM5NTBhLTE1MDAtNDUxOC1hOGQyLTBlZmM5NmUxZTJmOCJ9&pageName=ReportSection" frameborder="0" allowFullScreen="true"></iframe> -->
+        <iframe title="Multivitamins for Centrum" width="2200" height="1000" src="https://app.powerbi.com/view?r=eyJrIjoiMzMyODM3MjUtOGNkMS00ODBjLTg0YjktYmM4MjZlZGNhNmY3IiwidCI6ImFiMWM5NTBhLTE1MDAtNDUxOC1hOGQyLTBlZmM5NmUxZTJmOCJ9&pageName=ReportSection29596f781c940246c09c" frameborder="0" allowFullScreen="true"></iframe>
+    </div>
+    
+    <script>
+        function toggleMenu() {
+            document.getElementById("navMenu").classList.toggle("show");
+        }
+    
+        document.getElementById("nextPage").addEventListener("click", function() {
+            window.location.href = "e";
+        });
+    
+        document.addEventListener("click", function(event) {
+            if (!event.target.closest(".menu-container")) {
+                document.getElementById("navMenu").classList.remove("show");
+            }
+        });
+    </script>
+</body>
+</html> 

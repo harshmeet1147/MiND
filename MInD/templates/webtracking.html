@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Tracking (Pan India)</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 36px;
+            font-weight: bold;
+            color: #333;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .chart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .chart {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .chart:hover {
+            transform: scale(1.02);
+        }
+
+        #visits_chart_container {
+            width: 900px;
+            height: 250px;
+        }
+
+        #channels_chart_container {
+            width: 1000px;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Web Tracking (Pan India)</h1>
+
+    <div class="chart-container">
+        <div id="visits_chart_container" class="chart">
+            <div id="visits_chart" style="width: 100%; height: 100%;"></div>
+        </div>
+        <div id="channels_chart_container" class="chart">
+            <div id="channels_chart" style="width: 100%; height: 100%;"></div>
+        </div>
+    </div>
+
+    <script>
+        let visitsChart = echarts.init(document.getElementById('visits_chart'));
+        let channelsChart = echarts.init(document.getElementById('channels_chart'));
+
+        let visitsOption = {
+            title: { text: 'Visits Over Time', left: 'center', textStyle: { fontSize: 18, fontWeight: 'bold', color: '#333' } },
+            tooltip: { trigger: 'axis' },
+            legend: { data: ['ourlittlejoys.com', 'centrumshop.in', 'myrevital.com', 'hkvitals.com', 'mycf.in'], bottom: 0 },
+            xAxis: { 
+                type: 'category', 
+                data: ['Oct 23', 'Nov 23', 'Dec 23', 'Jan 24', 'Feb 24', 'Mar 24', 'Apr 24', 'May 24', 'Jun 24', 'Jul 24', 'Aug 24', 'Sep 24'],
+                axisLabel: { fontSize: 12, color: '#555' }
+            },
+            yAxis: { type: 'value', axisLabel: { fontSize: 12, color: '#555' } },
+            series: [
+                { name: 'ourlittlejoys.com', type: 'line', data: [200000, 250000, 300000, 320000, 340000, 360000, 380000, 400000, 450000, 470000, 490000, 508000], smooth: true },
+                { name: 'centrumshop.in', type: 'line', data: [50000, 60000, 70000, 75000, 80000, 85000, 90000, 95000, 100000, 110000, 120000, 130000], smooth: true },
+                { name: 'myrevital.com', type: 'line', data: [10000, 15000, 20000, 22000, 25000, 27000, 30000, 33000, 36000, 40000, 50000, 59000], smooth: true },
+                { name: 'hkvitals.com', type: 'line', data: [600000, 650000, 700000, 720000, 750000, 780000, 800000, 820000, 840000, 850000, 860000, 861200], smooth: true },
+                { name: 'mycf.in', type: 'line', data: [70000, 80000, 90000, 100000, 120000, 140000, 160000, 180000, 200000, 220000, 240000, 250000], smooth: true }
+            ]
+        };
+
+        let channelsOption = {
+            title: { text: 'Channels Overview', left: 'center', textStyle: { fontSize: 18, fontWeight: 'bold', color: '#333' } },
+            tooltip: { trigger: 'axis' },
+            legend: { data: ['ourlittlejoys.com', 'centrumshop.in', 'myrevital.com', 'hkvitals.com', 'mycf.in'], bottom: 0 },
+            xAxis: { 
+                type: 'category', 
+                data: ['Unknown', 'Email', 'Referrals', 'Social', 'Organic search', 'Paid search', 'Display ads'],
+                axisLabel: {
+                    interval: 0, 
+                    fontSize: 12, 
+                    color: '#555',
+                    rich: {
+                        labelBox: {
+                            backgroundColor: '#ddd', 
+                            padding: [4, 8], 
+                            borderRadius: 5, 
+                            borderWidth: 1,
+                            borderColor: '#666'
+                        }
+                    },
+                    formatter: function (value) {
+                        return `{labelBox|${value}}`; 
+                    }
+                }
+            },
+            yAxis: { type: 'value', axisLabel: { fontSize: 12, color: '#555' } },
+            series: [
+                { name: 'ourlittlejoys.com', type: 'bar', data: [1500000, 200000, 100000, 200000, 500000, 2000000, 250000], barWidth: 30 },
+                { name: 'centrumshop.in', type: 'bar', data: [300000, 50000, 20000, 40000, 150000, 500000, 70000], barWidth: 30 },
+                { name: 'myrevital.com', type: 'bar', data: [50000, 10000, 5000, 10000, 25000, 60000, 8000], barWidth: 30 },
+                { name: 'hkvitals.com', type: 'bar', data: [2500000, 500000, 300000, 400000, 1000000, 3000000, 450000], barWidth: 30 },
+                { name: 'mycf.in', type: 'bar', data: [800000, 150000, 100000, 120000, 400000, 1000000, 180000], barWidth: 30 }
+            ]
+        };
+
+        visitsChart.setOption(visitsOption);
+        channelsChart.setOption(channelsOption);
+    </script>
+
+</body>
+</html>

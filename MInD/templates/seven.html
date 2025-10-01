@@ -1,0 +1,273 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Health (App Traffic)</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f8f8;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #chart-container {
+            width: 80%;
+            height: 800px;
+            margin: auto;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        select {
+            padding: 10px;
+            margin-top: 20px;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+    </style>
+    <style>
+        .nav-container {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            padding: 8px 12px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .nav-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .menu-container {
+            position: relative;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .menu {
+            display: none;
+            position: absolute;
+            top: 30px;
+            left: 0;
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .menu a {
+            display: block;
+            padding: 5px 10px;
+            text-decoration: none;
+            color: black;
+        }
+
+        .menu a:hover {
+            background: #f0f0f0;
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
+    <style>
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            border-radius: 8px;
+        }
+    
+        .popup-content {
+            position: relative;
+        }
+    
+        .close-btn {
+    position: fixed;
+    top: 0px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 40px;
+    font-weight: bold;
+    color: black;
+    background: none;
+    border: none;
+    outline: none;
+}
+
+.close-btn:hover {
+    color: red;
+}
+    </style>
+</head>
+<body>
+    <div class="logo" style="position: absolute; top: 20px; right: 20px;"><img src="{% static 'mlogo.png' %}" alt="Hive Logo" style="width: 160px; height: auto;"></div>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="history.back()">Back</button>
+        <button class="nav-btn" id="nextPage">Next</button>
+        <button class="nav-btn" id="insightsBtn">Insights</button>
+        <div id="insightsPopup" class="popup">
+            <div class="popup-content">
+                <span class="close-btn" onclick="closePopup()">&times;</span>
+                <p><strong>BuyWOW</strong>: BuyWOW's high ratings suggest a strong user base, but declining new positive ratings and rising critical feedback hint at retention issues. This could stem from service quality gaps or over-reliance on new user acquisition without sustaining experience. Addressing post-purchase experience is key.</p>
+
+                <p><strong>Minimalist</strong>: Minimalist’s niche audience likely drives repeat engagement, but app stickiness may be low if users research more than they buy. If retention isn’t improving, stronger personalization, subscription models, or expert-led content could help deepen commitment.</p>
+
+                <p><strong>Pilgrim</strong>: Pilgrim’s unique formulations attract discovery-driven buyers, but low repeat rates may indicate weak habitual use. If drop-offs are high, better onboarding, product education, or loyalty incentives could be critical for conversion and retention.</p>
+
+            </div>
+        </div>
+    
+        <div class="menu-container">
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
+            <div class="menu" id="navMenu">
+                <a href="four">Web</a>
+                <hr>
+                <a href="seven">App</a>
+                <hr>
+                <a href="a">Amazon</a>
+                <hr>
+                <a href="qcom">Q-Comm</a>
+                
+            </div>
+        </div>
+    </div>
+    
+    <h2>Comparison Of Brand App Volume Metrics Between Brands</h2>
+    <label for="metricSelect">Select a Metric: </label>
+    <select id="metricSelect">
+        <option value="active">Active Users</option>
+        <option value="install">Install Base</option>
+        <option value="downloads">Downloads</option>
+    </select>
+    <div id="chart-container"></div>
+    <script>
+        const rawData  = [
+    { name: "Buywow India", date: "2024-02", downloads: 7403, active: 118255, install: 1485238 },
+    { name: "Buywow India", date: "2024-03", downloads: 13769, active: 259401, install: 1479687 },
+    { name: "Buywow India", date: "2024-04", downloads: 50417, active: 140675, install: 1790660 },
+    { name: "Buywow India", date: "2024-05", downloads: 9957, active: 101605, install: 1679228 },
+    { name: "Buywow India", date: "2024-06", downloads: 8743, active: 96318, install: 1926340 },
+    { name: "Buywow India", date: "2024-07", downloads: 7935, active: 403745, install: 1607770 },
+    { name: "Buywow India", date: "2024-08", downloads: 8438, active: 104016, install: 1608363 },
+    { name: "Buywow India", date: "2024-09", downloads: 7779, active: 243826, install: 1337776 },
+    { name: "Buywow India", date: "2024-10", downloads: 6966, active: 390409, install: 1407077 },
+    { name: "Buywow India", date: "2024-11", downloads: 4229, active: 521671, install: 1810550 },
+    { name: "Buywow India", date: "2024-12", downloads: 4876, active: 507992, install: 2304781 },
+    { name: "Buywow India", date: "2025-01", downloads: 5166, active: 267563, install: 1632708 },
+    { name: "Minimalist - Skincare", date: "2024-02", downloads: 16189, active: 151479, install: 453582 },
+    { name: "Minimalist - Skincare", date: "2024-03", downloads: 41649, active: 110328, install: 311064 },
+    { name: "Minimalist - Skincare", date: "2024-04", downloads: 102474, active: 211735, install: 853001 },
+    { name: "Minimalist - Skincare", date: "2024-05", downloads: 103721, active: 531417, install: 1805831 },
+    { name: "Minimalist - Skincare", date: "2024-06", downloads: 92248, active: 272216, install: 1731503 },
+    { name: "Minimalist - Skincare", date: "2024-07", downloads: 154258, active: 263768, install: 1551169 },
+    { name: "Minimalist - Skincare", date: "2024-08", downloads: 55949, active: 89051, install: 1263772 },
+    { name: "Minimalist - Skincare", date: "2024-09", downloads: 15956, active: 120818, install: 930891 },
+    { name: "Minimalist - Skincare", date: "2024-10", downloads: 22488, active: 441333, install: 1818315 },
+    { name: "Minimalist - Skincare", date: "2024-11", downloads: 52161, active: 490503, install: 2123207 },
+    { name: "Minimalist - Skincare", date: "2024-12", downloads: 41961, active: 467241, install: 1852872 },
+    { name: "Minimalist - Skincare", date: "2025-01", downloads: 62205, active: 94317, install: 1441941 },
+    { name: "Pilgrim India", date: "2024-02", downloads: 35750, active: 57293, install: 436019 },
+    { name: "Pilgrim India", date: "2024-03", downloads: 32581, active: 49977, install: 408694 },
+    { name: "Pilgrim India", date: "2024-04", downloads: 42525, active: 140563, install: 416840 },
+    { name: "Pilgrim India", date: "2024-05", downloads: 37970, active: 58597, install: 403528 },
+    { name: "Pilgrim India", date: "2024-06", downloads: 67623, active: 186939, install: 463771 },
+    { name: "Pilgrim India", date: "2024-07", downloads: 62602, active: 159610, install: 689213 },
+    { name: "Pilgrim India", date: "2024-08", downloads: 54969, active: 158649, install: 438449 },
+    { name: "Pilgrim India", date: "2024-09", downloads: 44546, active: 97673, install: 418391 },
+    { name: "Pilgrim India", date: "2024-10", downloads: 55074, active: 247770, install: 479343 },
+    { name: "Pilgrim India", date: "2024-11", downloads: 57972, active: 551186, install: 1057277 },
+    { name: "Pilgrim India", date: "2024-12", downloads: 97598, active: 179122, install: 771069 },
+    { name: "Pilgrim India", date: "2025-01", downloads: 48213, active: 152552, install: 1016163 }
+];
+
+        
+        function updateChart(selectedMetric) {
+            const dates = [...new Set(rawData.map(d => d.date))];
+            const seriesData = {};
+            rawData.forEach(d => {
+                if (!seriesData[d.name]) {
+                    seriesData[d.name] = [];
+                }
+                seriesData[d.name].push(d[selectedMetric]);
+            });
+            
+            const chart = echarts.init(document.getElementById("chart-container"));
+            chart.setOption({
+                title: { text: `Metric Over Time` },
+                tooltip: { trigger: 'axis' },
+                legend: { data: Object.keys(seriesData) },
+                xAxis: { type: 'category', data: dates, name: 'Date' },
+                yAxis: { type: 'value', name: 'Count' },
+                series: Object.keys(seriesData).map((brand, index) => ({
+                    name: brand,
+                    type: 'line',
+                    data: seriesData[brand],
+                    smooth: true,
+                    lineStyle: { width: 3 },
+                    itemStyle: { color: ['#007bff', '#28a745', '#dc3545'][index] }
+                }))
+            });
+        }
+        
+        document.getElementById("metricSelect").addEventListener("change", (e) => updateChart(e.target.value));
+        updateChart("active");
+    </script>
+    <script>
+        function toggleMenu() {
+            document.getElementById("navMenu").classList.toggle("show");
+        }
+    
+        // Set the Next button's URL
+        document.getElementById("nextPage").addEventListener("click", function() {
+            window.location.href = "eight"; // Change dynamically per page
+        });
+    
+        // Close menu when clicking outside
+        document.addEventListener("click", function(event) {
+            if (!event.target.closest(".menu-container")) {
+                document.getElementById("navMenu").classList.remove("show");
+            }
+        });
+    
+        // Show Insights Popup
+        document.getElementById("insightsBtn").addEventListener("click", function() {
+            document.getElementById("insightsPopup").style.display = "block";
+        });
+    
+        // Close Insights Popup
+        function closePopup() {
+            document.getElementById("insightsPopup").style.display = "none";
+        }
+    </script>
+    
+</body>
+</html>

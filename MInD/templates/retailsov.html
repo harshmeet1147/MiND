@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retail SOV Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.0/dist/echarts.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f8f8;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #chart-container {
+            width: 80%;
+            height: 500px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+        }
+        select {
+            margin-bottom: 10px;
+            padding: 5px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <select id="platform">
+        <option value="amazon">Amazon</option>
+        <option value="zepto">Zepto</option>
+    </select>
+    <div id="chart-container"></div>
+    <script>
+        var chartDom = document.getElementById('chart-container');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        var dataSets = {
+            amazon: [120, 150, 170, 130, 160],
+            zepto: [100, 140, 180, 120, 150]
+        };
+
+        function updateChart(platform) {
+            option = {
+                title: {
+                    text: 'Retail SOV Over Time',
+                    left: 'center',
+                    textStyle: {
+                        fontSize: 18,
+                        fontWeight: 'bold',
+                        color: '#333'
+                    }
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'line'
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['2024-02-01', '2024-02-02', '2024-02-03', '2024-02-04', '2024-02-05'],
+                    axisLine: {
+                        lineStyle: {
+                            color: '#888'
+                        }
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLine: {
+                        lineStyle: {
+                            color: '#888'
+                        }
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: '#ddd'
+                        }
+                    }
+                },
+                series: [
+                    {
+                        name: 'SOV',
+                        type: 'line',
+                        data: dataSets[platform],
+                        smooth: true,
+                        lineStyle: {
+                            color: '#007BFF',
+                            width: 3
+                        },
+                        itemStyle: {
+                            color: '#007BFF'
+                        },
+                        areaStyle: {
+                            color: 'rgba(0, 123, 255, 0.1)'
+                        }
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        }
+
+        document.getElementById('platform').addEventListener('change', function() {
+            updateChart(this.value);
+        });
+
+        updateChart('amazon');
+    </script>
+</body>
+</html>

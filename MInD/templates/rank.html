@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ranking Table with Logos</title>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+            width: 95%;
+            max-width: 1400px;
+        }
+
+        select {
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        select:hover {
+            background-color: #e9ecef;
+        }
+
+        table {
+    width: 100%;
+    height: 500px; /* Adjust height as needed */
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 18px;
+}
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        th {
+            background-color: white;
+            color: #333;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        td {
+            background-color: #fff;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+            transform: scale(1.01);
+        }
+
+        img {
+            height: 50px;
+            width: 50px;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <label for="category">Select Category:</label>
+        <select id="category">
+            <option value="omega_oils">Omega Oils</option>
+        </select>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <!-- <th>Jan'24</th>
+                    <th>Feb'24</th>
+                    <th>Mar'24</th>
+                    <th>Apr'24</th>
+                    <th>May'24</th>
+                    <th>Jun'24</th>
+                    <th>Jul'24</th> -->
+                    <th>Aug'24</th>
+                    <th>Sep'24</th>
+                    <th>Oct'24</th>
+                    <th>Nov'24</th>
+                    <th>Dec'24</th>
+                    <th>Jan'25</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Rank 1</td>
+                    <!-- <td><img src="static/wow.png" alt="WoW"></td>
+                    <td><img src="static/wow.png" alt="WoW"></td>
+                    <td><img src="static/wow.png" alt="WoW"></td>
+                    <td><img src="static/wow.png" alt="WoW"></td>
+                    <td><img src="static/wow.png" alt="WoW"></td>
+                    <td><img src="static/wow.png" alt="WoW"></td>
+                    <td><img src="static/wow.png" alt="WoW"></td> -->
+                    <td><img src="static/wow.png" alt="WoW"></td>
+                    <td><img src="static/wow.png" alt="WoW"></td>
+                    <td><img src="static/wow.png" alt="WoW"></td>
+                    <td><img src="static/wow.png" alt="WoW"></td>
+                    <td><img src="static/wow.png" alt="WoW"></td>
+                    <td><img src="static/wow.png" alt="WoW"></td>
+                </tr>
+                <tr>
+                    <td>Rank 2</td>
+                    <!-- <td><img src="static/vital.png" alt="HK Vitals"></td>
+                    <td><img src="static/vital.png" alt="HK Vitals"></td>
+                    <td><img src="static/vital.png" alt="HK Vitals"></td>
+                    <td><img src="static/vital.png" alt="HK Vitals"></td>
+                    <td><img src="static/vital.png" alt="HK Vitals"></td>
+                    <td><img src="static/vital.png" alt="HK Vitals"></td>
+                    <td><img src="static/vital.png" alt="HK Vitals"></td> -->
+                    <td><img src="static/vital.png" alt="HK Vitals"></td>
+                    <td><img src="static/vital.png" alt="HK Vitals"></td>
+                    <td><img src="static/tata.png" alt="Tata 1Mg"></td>
+                    <td><img src="static/tata.png" alt="Tata 1Mg"></td>
+                    <td><img src="static/vital.png" alt="HK Vitals"></td>
+                    <td><img src="static/neu.png" alt="Neuherbs"></td>
+                </tr>
+                <tr>
+                    <td>Rank 3</td>
+                    <!-- <td><img src="static/mb.png" alt="MuscleBlaze"></td>
+                    <td><img src="static/mb.png" alt="MuscleBlaze"></td>
+                    <td><img src="static/mb.png" alt="MuscleBlaze"></td>
+                    <td><img src="static/mb.png" alt="MuscleBlaze"></td>
+                    <td><img src="static/mb.png" alt="MuscleBlaze"></td>
+                    <td><img src="static/mb.png" alt="MuscleBlaze"></td>
+                    <td><img src="static/mb.png" alt="MuscleBlaze"></td> -->
+                    <td><img src="static/mb.png" alt="MuscleBlaze"></td>
+                    <td><img src="static/tata.png" alt="Tata 1Mg"></td>
+                    <td><img src="static/vital.png" alt="HK Vitals"></td>
+                    <td><img src="static/vital.png" alt="HK Vitals"></td>
+                    <td><img src="static/tata.png" alt="Tata 1Mg"></td>
+                    <td><img src="static/tata.png" alt="Tata 1Mg"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

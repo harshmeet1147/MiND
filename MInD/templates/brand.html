@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Brand Summary Dashboard</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.2/echarts.min.js"></script>
+        <style>
+            body {
+                font-family: 'Poppins', sans-serif;
+                background-color: #f4f4f4;
+                text-align: center;
+                padding: 20px;
+            }
+    
+            h1 {
+                font-size: 32px;
+                color: #222;
+                margin-bottom: 20px;
+            }
+    
+            .dashboard {
+                display: flex;
+                justify-content: space-around;
+                flex-wrap: wrap;
+                margin: 20px 0;
+            }
+    
+            .chart-container {
+                width: 45%;
+                height: 350px;
+                background: white;
+                padding: 20px;
+                border-radius: 15px;
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            }
+    
+            .filters {
+                margin: 20px 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+    
+            select, button {
+                padding: 12px 18px;
+                margin: 10px;
+                border-radius: 10px;
+                border: none;
+                cursor: pointer;
+                font-size: 16px;
+                font-weight: 500;
+                transition: all 0.3s ease-in-out;
+            }
+    
+            select {
+                background: white;
+                border: 2px solid #007bff;
+                color: #007bff;
+                font-weight: bold;
+                outline: none;
+            }
+    
+            select:hover, select:focus {
+                background: #007bff;
+                color: white;
+            }
+    
+            button {
+                background: linear-gradient(135deg, #007bff, #00d4ff);
+                color: white;
+                font-weight: bold;
+                box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
+                transition: all 0.3s ease-in-out;
+            }
+    
+            button:hover {
+                background: linear-gradient(135deg, #0056b3, #00a1c9);
+                transform: scale(1.1);
+            }
+    
+            .insights {
+                margin-top: 20px;
+                width: 80%;
+                height: auto;
+                padding: 20px;
+                background: white;
+                border-radius: 15px;
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+                text-align: left;
+                font-size: 18px;
+                line-height: 1.6;
+                color: #333;
+            }
+    
+            .insights b {
+                font-size: 20px;
+                color: #007bff;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Brand Summary Dashboard</h1>
+        
+    
+        <div class="filters">
+            <label for="monthFilter" style="font-weight: bold; font-size: 18px; color: #007bff;">Select Month:</label>
+            <select id="monthFilter">
+                <option value="All">All</option>
+                <option value="Jan">January</option>
+                <option value="Feb">February</option>
+                <option value="Mar">March</option>
+            </select>
+        </div>
+    
+        <div class="dashboard">
+            <div id="lineChart" class="chart-container"></div>
+            <div id="pieChart" class="chart-container"></div>
+        </div>
+    
+        <div class="filters">
+            <button onclick="applyFilter('All')">All Channels</button>
+            <button onclick="applyFilter('Store')">Store</button>
+            <button onclick="applyFilter('App')">App</button>
+            <button onclick="applyFilter('Web')">Web</button>
+            <button onclick="applyFilter('Retail')">Retail</button>
+        </div>
+    
+        <div class="insights" id="insightBox">
+            <b>Areas Requiring Attention:</b> Select a filter to see insights.
+        </div>
+        <div class="navigation">
+            <button class="nav-button" onclick="goBack()">&#8592;</button>
+            <button class="nav-button" onclick="goNext()">&#8594;</button>
+        </div>
+
+    <script>
+        var lineChart = echarts.init(document.getElementById('lineChart'));
+        var pieChart = echarts.init(document.getElementById('pieChart'));
+
+        var data = {
+            'Jan': { channels: { 'Store': 20, 'App': 10, 'Web': 8, 'Retail': 7 }, repeatCust: 15, ntbCust: 10 },
+            'Feb': { channels: { 'Store': 18, 'App': 15, 'Web': 10, 'Retail': 7 }, repeatCust: 18, ntbCust: 12 },
+            'Mar': { channels: { 'Store': 12, 'App': 14, 'Web': 8, 'Retail': 6 }, repeatCust: 12, ntbCust: 9 }
+        };
+
+        function getAggregatedData() {
+            return {
+                revenue: [
+                    Object.values(data.Jan.channels).reduce((a, b) => a + b, 0),
+                    Object.values(data.Feb.channels).reduce((a, b) => a + b, 0),
+                    Object.values(data.Mar.channels).reduce((a, b) => a + b, 0)
+                ],
+                repeatCust: [data.Jan.repeatCust, data.Feb.repeatCust, data.Mar.repeatCust],
+                ntbCust: [data.Jan.ntbCust, data.Feb.ntbCust, data.Mar.ntbCust],
+                channels: {
+                    'Store': Object.values(data).reduce((sum, month) => sum + month.channels.Store, 0),
+                    'App': Object.values(data).reduce((sum, month) => sum + month.channels.App, 0),
+                    'Web': Object.values(data).reduce((sum, month) => sum + month.channels.Web, 0),
+                    'Retail': Object.values(data).reduce((sum, month) => sum + month.channels.Retail, 0)
+                }
+            };
+        }
+
+        function renderCharts(month = 'All', channel = 'All') {
+            let selectedData = month === 'All' ? getAggregatedData() : data[month];
+
+            let pieData = Object.keys(selectedData.channels).map(key => ({ value: selectedData.channels[key], name: key }));
+
+            if (channel !== 'All') {
+                pieData = pieData.filter(d => d.name === channel);
+                if (pieData.length === 0) {
+                    pieData = [{ value: 1, name: "No Data" }];
+                }
+            }
+
+            let lineRevenue = (month === 'All')
+                ? getAggregatedData().revenue
+                : [Object.values(selectedData.channels).reduce((a, b) => a + b, 0)];
+
+            lineChart.setOption({
+                title: { text: `Revenue & Customer Trends (${month})`, left: 'center' },
+                tooltip: { trigger: 'axis' },
+                legend: { data: ['Revenue', 'Repeat Customers', 'NTB Customers'], top: 30 },
+                xAxis: { type: 'category', data: ['Jan', 'Feb', 'Mar'] },
+                yAxis: { type: 'value', name: 'Count' },
+                series: [
+                    { name: 'Revenue', type: 'line', data: lineRevenue },
+                    { name: 'Repeat Customers', type: 'line', data: month === 'All' ? getAggregatedData().repeatCust : [selectedData.repeatCust] },
+                    { name: 'NTB Customers', type: 'line', data: month === 'All' ? getAggregatedData().ntbCust : [selectedData.ntbCust] }
+                ]
+            });
+
+            pieChart.setOption({
+    title: { text: `Revenue by Channel (${month})`, left: 'center' },
+    tooltip: { trigger: 'item' },
+    series: [{
+        name: 'Channels',
+        type: 'pie',
+        radius: '50%',
+        data: pieData,
+        label: { 
+            show: true, 
+            formatter: '{b}: {c} ({d}%)' 
+        }
+    }]
+});
+
+
+            updateInsights(channel);
+        }
+
+        function updateInsights(channel) {
+            let insights = {
+                'Store': "Store revenue is stable, but repeat customers are decreasing.",
+                'App': "App engagement is growing, but NTB customers are lower.",
+                'Web': "Web traffic is steady, but conversion rates need improvement.",
+                'Retail': "Retail sales dropped slightly compared to previous months.",
+                'All': "Select a filter to see insights."
+            };
+
+            document.getElementById("insightBox").innerHTML = `<b>Areas Requiring Attention:</b> ${insights[channel] || insights['All']}`;
+        }
+
+        function applyFilter(channel) {
+            let month = document.getElementById("monthFilter").value;
+            renderCharts(month, channel);
+        }
+
+        document.getElementById("monthFilter").addEventListener("change", function () {
+            applyFilter('All'); 
+        });
+        function goHome() {
+            window.location.href = 'cat';
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function goNext() {
+            window.location.href = 'customerAffinityoverviewtitle';
+        }
+
+        renderCharts('All', 'All');
+    </script>
+</body>
+</html>

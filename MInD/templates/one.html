@@ -1,0 +1,382 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L30 Brand-Wise SKU & BSR Distribution</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.3/dist/echarts.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f8f8; /* Off-white background */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        /* .container {
+            max-width: 1200px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        } */
+        .header {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        select {
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        select:hover {
+            border-color: #007bff;
+        }
+        .chart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .chart-box {
+            width: 90%;
+            height: 500px;
+            background: white;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+        <style>
+            .nav-container {
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                z-index: 1000;
+            }
+    
+            .nav-btn {
+                padding: 8px 12px;
+                border: none;
+                background-color: #007bff;
+                color: white;
+                cursor: pointer;
+                border-radius: 5px;
+                font-size: 16px;
+            }
+    
+            .nav-btn:hover {
+                background-color: #0056b3;
+            }
+    
+            .menu-container {
+                position: relative;
+            }
+    
+            .menu-btn {
+                background: none;
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+            }
+    
+            .menu {
+                display: none;
+                position: absolute;
+                top: 30px;
+                left: 0;
+                background: white;
+                border: 1px solid #ccc;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+                border-radius: 5px;
+                padding: 10px;
+            }
+    
+            .menu a {
+                display: block;
+                padding: 5px 10px;
+                text-decoration: none;
+                color: black;
+            }
+    
+            .menu a:hover {
+                background: #f0f0f0;
+            }
+    
+            .show {
+                display: block;
+            }
+        </style>
+        <style>
+            .popup {
+                display: none;
+                position: fixed;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                padding: 20px;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+                z-index: 1000;
+                border-radius: 8px;
+            }
+        
+            .popup-content {
+                position: relative;
+            }
+        
+            .close-btn {
+        position: fixed;
+        top: 0px;
+        right: 10px;
+        cursor: pointer;
+        font-size: 40px;
+        font-weight: bold;
+        color: black;
+        background: none;
+        border: none;
+        outline: none;
+    }
+    
+    .close-btn:hover {
+        color: red;
+    }
+        </style>
+    
+</head>
+<body>
+    <div class="logo" style="position: absolute; top: 20px; right: 20px;"><img src="{% static 'mlogo.png' %}" alt="Hive Logo" style="width: 160px; height: auto;"></div>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="history.back()">Back</button>
+        <button class="nav-btn" id="nextPage">Next</button>
+        <button class="nav-btn" id="insightsBtn">Insights</button>
+        <div id="insightsPopup" class="popup">
+            <div class="popup-content">
+                <span class="close-btn" onclick="closePopup()">&times;</span>
+                <p>Sales are highly concentrated in lower price brackets, with the largest bubble (indicating highest sales volume) appearing at the lowest price range.</p>  
+<p>Median sales (3,006.50) are significantly lower than the average (78,836.58), suggesting a few high-performing ASINs are skewing the data.</p>  
+<p>The market appears to be price-sensitive, with a sharp drop in sales beyond the ₹1,000 price range.</p>
+
+
+            </div>
+        </div>
+    
+        <div class="menu-container">
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
+            <div class="menu" id="navMenu">
+                <a href="four">Web</a>
+                <hr>
+                <a href="seven">App</a>
+                <hr>
+                <a href="a">Amazon</a>
+                <hr>
+                <a href="qcom">Q-Comm</a>
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="header">Top Ranked Brands In The Category & Their Best Performing SKUs In Top 100 BSR (Amazon)</div>
+        <label for="category">Select Category:</label>
+        <select id="category"></select>
+        
+        <div class="chart-container">
+            <div id="salesByBrand" class="chart-box"></div>
+        </div>
+        <div class="chart-container">
+            <div id="salesByPriceBucket" class="chart-box"></div>
+        </div>
+    </div>
+
+    <script>
+        let brandColorMap = {}; // Global color map for brands
+    
+        async function fetchData() {
+            const response = await fetch('/MInD/oneData');
+            const data = await response.json();
+            return data;
+        }
+    
+        async function initialize() {
+            const data = await fetchData();
+            const categorySelect = document.getElementById('category');
+            data.categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categorySelect.appendChild(option);
+            });
+            categorySelect.addEventListener('change', () => initCharts(data, categorySelect.value));
+            if (data.categories.length) initCharts(data, data.categories[0]);
+        }
+    
+        function assignBrandColors(brands) {
+    const totalBrands = brands.length;
+    const colorPalette = [
+        "#E6194B", "#3CB44B", "#FFE119", "#4363D8", "#F58231", "#911EB4", "#46F0F0", "#F032E6",
+        "#BCF60C", "#FABEBE", "#008080", "#E6BEFF", "#9A6324", "#FFFAC8", "#800000", "#Aaffc3",
+        "#808000", "#FFD8B1", "#000075", "#808080", "#FFFFFF", "#000000"
+    ];
+
+    brands.forEach((brand, index) => {
+        if (!brandColorMap[brand]) {
+            // Pick from predefined palette if available, otherwise generate HSL-based color
+            brandColorMap[brand] = index < colorPalette.length 
+                ? colorPalette[index] 
+                : `hsl(${(index * 137.508) % 360}, 70%, 50%)`;  // Using golden angle for better separation
+        }
+    });
+}
+
+    
+        function formatNumber(value) {
+            return value.toLocaleString("en-IN"); // Adds commas (e.g., 1,00,000)
+        }
+    
+        function formatINR(value) {
+            return `₹${formatNumber(value)}`;
+        }
+    
+        function initCharts(data, selectedCategory) {
+            const filteredData = data.records.filter(d => d.category_dashb === selectedCategory);
+    
+            // ---------- UNIT SALES BY BRAND & ASIN ----------
+            const brandData = {};
+            filteredData.forEach(item => {
+                if (!brandData[item.brand]) brandData[item.brand] = {};
+                brandData[item.brand][item.asin] = (brandData[item.brand][item.asin] || 0) + item.sales;
+            });
+    
+            const topBrands = Object.entries(brandData)
+                .map(([brand, asinSales]) => ({ 
+                    brand, 
+                    totalSales: Object.values(asinSales).reduce((acc, curr) => acc + curr, 0), 
+                    asinSales 
+                }))
+                .sort((a, b) => b.totalSales - a.totalSales)
+                .slice(0, 10);
+    
+            const brandNames = topBrands.map(b => b.brand);
+            const allAsins = [...new Set(topBrands.flatMap(b => Object.keys(b.asinSales)))];
+    
+            assignBrandColors(brandNames);
+    
+            const seriesDataBrand = allAsins.map(asin => ({
+                name: asin,
+                type: 'bar',
+                barWidth: '50%',
+                stack: 'stackedBars',
+                emphasis: { focus: 'series' },
+                itemStyle: { color: brandColorMap[asin] }, 
+                data: brandNames.map(brand => brandData[brand]?.[asin] || 0)
+            }));
+    
+            const salesByBrandChart = echarts.init(document.getElementById('salesByBrand'));
+            salesByBrandChart.setOption({
+                title: { text: 'Unit Sales by ASINs & Brand' },
+                tooltip: { 
+                    trigger: 'item',
+                    formatter: params => `Brand: ${params.seriesName}, Sales: ${formatINR(params.value)}`
+                },
+                toolbox: { feature: { saveAsImage: {} } },
+                xAxis: { type: 'category', data: brandNames, axisLabel: { interval: 0, rotate: 45 } },
+                yAxis: { type: 'value', axisLabel: { formatter: value => formatINR(value) } },
+                series: seriesDataBrand,
+                grid: { containLabel: true },
+                barCategoryGap: '20%',
+                barGap: '5%',
+                dataZoom: [{ type: 'slider', show: true, start: 0, end: 100, xAxisIndex: [0] }]
+            });
+    
+            // ---------- SALES BY PRICE BUCKET & BRAND ----------
+            const priceData = {};
+            filteredData.forEach(item => {
+                if (!priceData[item.price_bucket]) priceData[item.price_bucket] = {};
+                if (!priceData[item.price_bucket][item.brand]) priceData[item.price_bucket][item.brand] = {};
+                priceData[item.price_bucket][item.brand][item.asin] = (priceData[item.price_bucket][item.brand][item.asin] || 0) + item.sales;
+            });
+    
+            const priceBuckets = Object.keys(priceData).sort((a, b) => a - b);
+            const brandNamesPrice = [...new Set(Object.values(priceData).flatMap(b => Object.keys(b)))];
+    
+            assignBrandColors(brandNamesPrice);
+    
+            const seriesDataPrice = brandNamesPrice.map(brand => ({
+                name: brand,
+                type: 'bar',
+                stack: 'total',
+                emphasis: { focus: 'series' },
+                itemStyle: { color: brandColorMap[brand] }, 
+                data: priceBuckets.map(bucket => {
+                    const totalSales = priceData[bucket]?.[brand] || {};
+                    return Object.values(totalSales).reduce((sum, sales) => sum + sales, 0);
+                })
+            }));
+    
+            const salesByPriceChart = echarts.init(document.getElementById('salesByPriceBucket'));
+            salesByPriceChart.setOption({
+                title: { text: 'Sales by Price Bucket & Brand' },
+                tooltip: { 
+                    trigger: 'item',
+                    formatter: params => {
+                        const bucket = priceBuckets[params.dataIndex];
+                        const brand = params.seriesName;
+                        const asinSales = priceData[bucket]?.[brand] || {};
+                        return `Brand: ${brand}<br/>` +
+                               Object.entries(asinSales).map(([asin, sales]) => `ASIN: ${asin}, Sales: ${formatINR(sales)}`).join('<br/>');
+                    }
+                },
+                toolbox: { feature: { saveAsImage: {} } },
+                xAxis: { type: 'category', data: priceBuckets, axisLabel: { interval: 0, rotate: 45 } },
+                yAxis: { type: 'value', axisLabel: { formatter: value => formatINR(value) } },
+                series: seriesDataPrice
+            });
+        }
+    
+        initialize();
+    </script>
+    
+    <script>
+        function toggleMenu() {
+            document.getElementById("navMenu").classList.toggle("show");
+        }
+    
+        // Set the Next button's URL
+        document.getElementById("nextPage").addEventListener("click", function() {
+            window.location.href = "a4"; // Change dynamically per page
+        });
+    
+        // Close menu when clicking outside
+        document.addEventListener("click", function(event) {
+            if (!event.target.closest(".menu-container")) {
+                document.getElementById("navMenu").classList.remove("show");
+            }
+        });
+    
+        // Show Insights Popup
+        document.getElementById("insightsBtn").addEventListener("click", function() {
+            document.getElementById("insightsPopup").style.display = "block";
+        });
+    
+        // Close Insights Popup
+        function closePopup() {
+            document.getElementById("insightsPopup").style.display = "none";
+        }
+    </script>
+</body>
+</html>

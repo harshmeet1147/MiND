@@ -1,0 +1,269 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media (Sentiment)</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.0.1/wordcloud2.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f8f8;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .chart {
+            width: 45%;
+            height: 500px;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .filter {
+            text-align: center;
+         
+            margin-bottom: 20px;
+        }
+        .header {
+            text-align: center;
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .wordcloud {
+            width: 90%;
+            height: 500px;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+        <style>
+            .nav-container {
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                z-index: 1000;
+            }
+    
+            .nav-btn {
+                padding: 8px 12px;
+                border: none;
+                background-color: #007bff;
+                color: white;
+                cursor: pointer;
+                border-radius: 5px;
+                font-size: 16px;
+            }
+    
+            .nav-btn:hover {
+                background-color: #0056b3;
+            }
+    
+            .menu-container {
+                position: relative;
+            }
+    
+            .menu-btn {
+                background: none;
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+            }
+    
+            .menu {
+                display: none;
+                position: absolute;
+                top: 30px;
+                left: 0;
+                background: white;
+                border: 1px solid #ccc;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+                border-radius: 5px;
+                padding: 10px;
+            }
+    
+            .menu a {
+                display: block;
+                padding: 5px 10px;
+                text-decoration: none;
+                color: black;
+            }
+    
+            .menu a:hover {
+                background: #f0f0f0;
+            }
+    
+            .show {
+                display: block;
+            }
+        </style>
+    
+</head>
+<body>
+    <div class="logo" style="position: absolute; top: 20px; right: 20px;"><img src="{% static 'mlogo.png' %}" alt="Hive Logo" style="width: 160px; height: auto;"></div>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="history.back()">Back</button>
+        <button class="nav-btn" id="nextPage">Next</button>
+    
+        <div class="menu-container">
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
+            <div class="menu" id="navMenu">
+                <a href="four">Web</a>
+                <hr>
+                <a href="seven">App</a>
+                <hr>
+                <a href="a">Amazon</a>
+                <hr>
+                <a href="qcom">Q-Comm</a>
+                
+            </div>
+        </div>
+    </div>
+    <div class="filter">
+        <div class="header">Social Media (Sentiment)</div>
+        <label for="brandSelect">Select Brand:</label>
+        
+        <select id="brandSelect" onchange="updateCharts()">
+            <option value="WoW Skin Science">WoW Skin Science</option>
+            <option value="Minimalist">Minimalist</option>
+            <option value="Pilgrim">Pilgrim</option>
+        </select>
+    </div>
+    <div class="container">
+        <div id="instaChart" class="chart"></div>
+        <div id="fbChart" class="chart"></div>
+    </div>
+    <div id="wordCloud" class="wordcloud"></div>
+    <script>
+        const sovData = {
+            "WoW Skin Science": [
+                ["Jan'24", 58, 14],
+                ["Feb'24", 58, 14],
+                ["Oct'24", 43, 11],
+                ["Nov'24", 58, 14],
+                ["Dec'24", 72, 18]
+            ],
+            "Minimalist": [
+                ["Jan'24", 61, 15],
+                ["Feb'24", 61, 15],
+                ["Oct'24", 46, 11],
+                ["Nov'24", 61, 15],
+                ["Dec'24", 76, 19]
+            ],
+            "Pilgrim": [
+                ["Jan'24", 53, 13],
+                ["Feb'24", 52, 13],
+                ["Oct'24", 39, 10],
+                ["Nov'24", 53, 13],
+                ["Dec'24", 66, 16]
+            ]
+        };
+
+        function updateCharts() {
+            const selectedBrand = document.getElementById("brandSelect").value;
+            const brandData = sovData[selectedBrand];
+            
+            const dates = brandData.map(item => item[0]);
+            const instaSOV = brandData.map(item => item[1]);
+            const fbSOV = brandData.map(item => item[2]);
+            
+            const instaChart = echarts.init(document.getElementById("instaChart"));
+            const fbChart = echarts.init(document.getElementById("fbChart"));
+            
+            const option = (title, data) => ({
+                title: { text: title },
+                tooltip: { trigger: 'axis' },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {},
+                        restore: {}
+                    }
+                },
+                xAxis: { type: 'category', data: dates },
+                yAxis: { type: 'value' },
+                series: [
+                    { 
+                        name: title, 
+                        type: 'line', 
+                        smooth: true, 
+                        data: data, 
+                        markPoint: {
+                            data: [
+                                { type: 'max', name: 'Max' },
+                                { type: 'min', name: 'Min' }
+                            ]
+                        }
+                    }
+                ]
+            });
+
+            instaChart.setOption(option('Instagram Business SOV', instaSOV));
+            fbChart.setOption(option('Facebook SOV', fbSOV));
+        }
+        updateCharts();
+
+        function createWordCloud() {
+            const words = [
+    ["deserves", 3], ["Potent", 2], ["formulas", 2], ["deliver", 2],
+    ["Swipe", 2], ["ingredients", 2], ["designed", 2], ["#wowskin", 2],
+    ["visible", 2], ["straight", 2], ["bringing", 2], ["#wowskinscience", 2],
+    ["activated", 2], ["naturals", 2], ["care", 2], ["love", 1],
+    ["strong", 1], ["works", 1], ["Science", 1], ["skin", 1],
+    ["Seasonal", 1], ["India's", 1], ["Photos", 1], ["Packed", 1],
+    ["hair", 1], ["Control", 1], ["post", 1], ["ready", 1],
+    ["strengthen", 1], ["nourish", 1], ["goodness", 1], ["Ultimate", 1],
+    ["reduce", 1], ["Trio", 1], ["Onion", 1], ["#wowskinscienceindia", 1],
+    ["shine", 1], ["hair fall", 1], ["watch", 1], ["Collagen", 1],
+    ["healthy", 1], ["Skin", 1], ["Wow", 1], ["WOW", 1]
+];
+
+
+            const canvas = document.createElement("canvas");
+            canvas.width = 2000;
+            canvas.height = 400;
+            document.getElementById("wordCloud").appendChild(canvas);
+            
+            WordCloud(canvas, {
+                list: words,
+                gridSize: 20,
+                weightFactor: 20,
+                fontFamily: 'Arial',
+                color: 'random-dark',
+                backgroundColor: '#f8f8f8'
+            });
+        }
+        createWordCloud();
+    </script>
+    <script>
+        function toggleMenu() {
+            document.getElementById("navMenu").classList.toggle("show");
+        }
+    
+        // Set the Next button's URL
+        document.getElementById("nextPage").addEventListener("click", function() {
+            window.location.href = "one"; // Change this dynamically per page
+        });
+    
+        // Close menu when clicking outside
+        document.addEventListener("click", function(event) {
+            if (!event.target.closest(".menu-container")) {
+                document.getElementById("navMenu").classList.remove("show");
+            }
+        });
+    </script>
+</body>
+</html>

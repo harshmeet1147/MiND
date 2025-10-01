@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Brand SKU Prevalence</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <style>
+        body { font-family: Arial; }
+        #main-chart { height: 600px; width: 100%; }
+    </style>
+</head>
+<body>
+    <h2>Brand SKU Prevalence By BSR Buckets</h2>
+
+    <form method="get">
+        <label><strong>Category:</strong></label>
+        <select name="category" onchange="this.form.submit()">
+            {% for cat in categories %}
+                <option value="{{ cat }}" {% if cat == selected_category %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+        </select>
+    </form>
+
+    <div id="main-chart"></div>
+
+
+<script>
+    const buckets = {{ buckets|safe }};
+    const xLabels = {{ x_labels|safe }};
+    const yLabels = {{ y_labels|safe }};
+
+    const data = [];
+
+    for (let x = 0; x < xLabels.length; x++) {
+        for (let y = 0; y < yLabels.length; y++) {
+            const keyStr = `${xLabels[x]}|||${yLabels[y]}`;  // Match backend!
+            const asinList = buckets[keyStr] || [];
+            data.push([x, y, asinList.length > 0 ? asinList.length : '-']);
+        }
+    }
+
+    const chart = echarts.init(document.getElementById('main-chart'));
+
+    const option = {
+        tooltip: {
+            formatter: function (params) {
+                const x = xLabels[params.data[0]];
+                const y = yLabels[params.data[1]];
+                const keyStr = `${x}|||${y}`;
+                const asinList = buckets[keyStr] || [];
+
+                if (asinList.length === 0) return 'No data';
+
+                return asinList.map(item =>
+                    `ASIN: ${item.asin}<br>Brand: ${item.brand}<br>Revenue: ₹${item.revenue.toLocaleString()}<br>Units: ${item.units}`
+                ).join('<br><br>');
+            }
+        },
+        xAxis: { type: 'category', data: xLabels, name: 'BSR Bucket' },
+        yAxis: { type: 'category', data: yLabels, name: 'Units Bucket' },
+        visualMap: {
+            min: 0,
+            max: 10,
+            calculable: true,
+            orient: 'horizontal',
+            left: 'center',
+            bottom: '5%',
+        },
+        series: [{
+            name: 'SKU Count',
+            type: 'heatmap',
+            data: data,
+            label: { show: true },
+            emphasis: {
+                itemStyle: {
+                    shadowBlur: 10,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }]
+    };
+
+    chart.setOption(option);
+</script>
+</body>
+</html>

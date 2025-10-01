@@ -1,0 +1,247 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Key Parameters Comparison By Brands</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <style>
+        body { font-family: 'Arial', sans-serif; background-color: #f8f9fa; margin: 0; }
+        .header { text-align: center; padding: 20px; font-size: 24px; font-weight: bold; color: #333; }
+        .controls { text-align: center; margin-bottom: 20px; font-size: 16px; }
+        .chart-container { display: flex; flex-wrap: wrap; justify-content: center; }
+        .chart { width: 1900px; height: 850px; background: white; padding: 20px; border-radius: 15px; box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.2); }
+    </style>
+    <style>
+        .nav-container {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            padding: 8px 12px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .nav-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .menu-container {
+            position: relative;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .menu {
+            display: none;
+            position: absolute;
+            top: 30px;
+            left: 0;
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .menu a {
+            display: block;
+            padding: 5px 10px;
+            text-decoration: none;
+            color: black;
+        }
+
+        .menu a:hover {
+            background: #f0f0f0;
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo" style="position: absolute; top: 20px; right: 20px;"><img src="{% static 'mlogo.png' %}" alt="Hive Logo" style="width: 160px; height: auto;"></div>
+    <div class="header">
+        <h2>Key Parameters Comparison By Brands</h2>
+    </div>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="history.back()">Back</button>
+        <button class="nav-btn" id="nextPage">Next</button>
+    
+        <div class="menu-container">
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
+            <div class="menu" id="navMenu">
+                <a href="four">Web</a>
+                <hr>
+                <a href="seven">App</a>
+                <hr>
+                <a href="a">Amazon</a>
+                <hr>
+                <a href="qcom">Q-Comm</a>
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <label for="category"><b>Category:</b></label>
+        <select id="category">
+            <option>Hair Oil</option>
+        </select>
+    </div>
+    
+    <div class="chart-container">
+        <div id="radar-chart" class="chart"></div>
+    </div>
+    
+    <script>
+        function fetchCSV(url) {
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    const rows = data.split("\n").map(row => row.split(","));
+                    const headers = rows.shift(); // Extract headers
+                    
+                    const brands = [];
+                    const values = [];
+                    rows.forEach(row => {
+                        brands.push(row[0]);
+                        values.push(row.slice(1).map(Number));
+                    });
+                    
+                    renderRadarChart(brands, values, headers.slice(1));
+                })
+                .catch(error => console.error("Error fetching CSV:", error));
+        }
+
+        function renderRadarChart(brands, values, indicators) {
+            let chart = echarts.init(document.getElementById("radar-chart"));
+            let maxValues = indicators.map((_, i) => Math.max(...values.map(v => v[i] || 0)));
+
+            let colors = ["#FF5733", "#3498DB", "#2ECC71", "#F1C40F", "#9B59B6", "#E74C3C"]; 
+
+            let option = {
+                title: { 
+                    text: "Plotted On Radar", 
+                    left: "center",
+                    textStyle: { fontSize: 22, fontWeight: "normal", color: "#333" }
+                },
+                tooltip: { 
+                    trigger: "item", 
+                    backgroundColor: "rgba(50, 50, 50, 0.8)", 
+                    textStyle: { color: "#fff" } 
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        saveAsImage: { show: true, title: "Save Chart" },
+                        restore: { show: true, title: "Reset" },
+                        dataZoom: { show: true, title: "Zoom" }
+                    }
+                },
+                legend: {
+                    data: brands,
+                    orient: "vertical",
+                    right: 30,
+                    top: "middle",
+                    textStyle: { fontSize: 14, fontWeight: "normal" },
+                    itemGap: 15
+                },
+                radar: {
+                    shape: "circle",
+                    radius: "80%",
+                    center: ["50%", "55%"],
+                    indicator: indicators.map((name, i) => ({
+                        name, 
+                        max: maxValues[i] || 1, // Avoid zero max values
+                        axisLabel: { 
+                            show: true,
+                            formatter: function (value) {
+                                return Math.round(value);
+                            },
+                            fontSize: 12,
+                            fontWeight: "normal",
+                            color: "#555"
+                        },
+                        textStyle: { fontSize: 14, fontWeight: "normal" }
+                    })),
+                    splitArea: { 
+                        show: true, 
+                        areaStyle: { color: ["#f7faff", "#e3f2fd"], opacity: 0.5 } 
+                    },
+                    axisLine: { lineStyle: { color: "#333", width: 2 } },
+                    splitLine: { lineStyle: { color: "#777", width: 1.5, type: "dashed" } }
+                },
+                series: [{
+                    type: "radar",
+                    lineStyle: { width: 3 },
+                    symbol: "circle",
+                    symbolSize: 6,
+                    itemStyle: { opacity: 1 },
+                    areaStyle: { opacity: 0.3 },
+                    emphasis: { lineStyle: { width: 4 } },
+                    animationDuration: 2000,
+                    animationEasing: "cubicOut",
+                    label: { 
+                        show: true,
+                        position: "inside",
+                        color: "#444",
+                        fontSize: 12,
+                        fontWeight: "normal",
+                        formatter: function (params) {
+                            return isNaN(params.value) ? "" : Math.round(params.value);
+                        }
+                    },
+                    data: brands.map((brand, index) => ({
+                        name: brand,
+                        value: values[index].map(v => isNaN(v) ? 0 : Math.round(v)), 
+                        itemStyle: { color: colors[index % colors.length] },
+                        areaStyle: { color: colors[index % colors.length], opacity: 0.2 },
+                        lineStyle: { color: colors[index % colors.length], width: 2.5 }
+                    }))
+                }]
+            };
+            chart.setOption(option);
+        }
+
+        fetchCSV("/static/data/I1.csv");
+    </script>
+    
+    
+    <script>
+        function toggleMenu() {
+            document.getElementById("navMenu").classList.toggle("show");
+        }
+    
+        // Set the Next button's URL
+        document.getElementById("nextPage").addEventListener("click", function() {
+            window.location.href = "j"; // Change this dynamically per page
+        });
+    
+        // Close menu when clicking outside
+        document.addEventListener("click", function(event) {
+            if (!event.target.closest(".menu-container")) {
+                document.getElementById("navMenu").classList.remove("show");
+            }
+        });
+    </script>
+</body>
+</html>

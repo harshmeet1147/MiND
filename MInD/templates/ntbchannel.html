@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NTB (By Channel)</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.0/dist/echarts.min.js"></script>
+    <style>
+        body {
+            background-color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background: white;
+            color: black;
+            padding: 15px;
+            text-align: center;
+            font-size: 30px;
+            font-weight: bold;
+        }
+        .charts-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 40px;
+        }
+        .chart-container {
+            width: 100%;
+            height:480px;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        select {
+            margin-bottom: 20px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .navigation {
+            position: absolute;
+            width: 100%;
+            bottom: 0px;
+            display: flex;
+            justify-content: center;
+            gap: 70px;
+        }
+        .nav-button {
+            font-size: 60px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #007BFF;
+        }
+        .nav-button:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">NTB (By Channel)</div>
+
+    <div class="charts-wrapper">
+        <select id="brandSelect" onchange="updateChart()" style="font-size: 14px; padding: 5px; width: 150px;margin-bottom: 60px;">
+            <option value="All">All</option>
+            <option value="Amazon">Amazon</option>
+            <option value="Flipkart">Flipkart</option>
+            <option value="Blinkit">Blinkit</option>
+            <option value="Zepto">Zepto</option>
+            <option value="Swiggy">Swiggy</option>
+            <option value="App">App</option>
+            <option value="Web">Web</option>
+        </select>
+        <div id="chart" class="chart-container"></div>
+        <div class="navigation">
+            <button class="nav-button" onclick="goBack()">&#8592;</button>
+            <button class="nav-button" onclick="goNext()">&#8594;</button>
+        </div>
+    </div>
+    
+    <script>
+        let ntbData = {
+            "Amazon": [137120, 144002, 133781, 138171, 217448, 134085, 172925, 201450, 191635, 145034, 209647, 200449],
+            "Flipkart": [],
+            "Blinkit": [96914, 97097, 98788, 93026, 78486, 78653, 67379, 54003, 76548, 82514, 102672, 60964],
+            "Zepto": [25365, 34631, 35834, 29389, 34165, 31883, 33974, 40796, 25716, 33861, 42083, 38398],
+            "Swiggy": [],
+            "App": [1106, 783, 1021, 954, 1216, 913, 1186, 1126, 920, 1004, 1115, 1153],
+            "Web": [2354, 2102, 2632, 2212, 2506, 2161, 2228, 2314, 2602, 2301, 2156, 2115]
+        };
+        
+        let months = ["Jan'24", "Feb'24", "Mar'24", "Apr'24", "May'24", "Jun'24", "Jul'24", "Aug'24", "Sep'24", "Oct'24", "Nov'24", "Dec'24"];
+        let chart = echarts.init(document.getElementById('chart'));
+
+        function updateChart() {
+            let selectedBrand = document.getElementById("brandSelect").value;
+            let seriesData = selectedBrand === "All" ? 
+                Object.keys(ntbData).map(brand => ({
+                    name: brand,
+                    type: "line",
+                    smooth: true,
+                    data: ntbData[brand],
+                    markPoint: { data: [{ type: 'max', name: 'Max' }, { type: 'min', name: 'Min' }] },
+                    lineStyle: { width: 3 },
+                    symbol: 'arrow',
+                    symbolSize: 10
+                })) : [{
+                    name: selectedBrand,
+                    type: "line",
+                    smooth: true,
+                    data: ntbData[selectedBrand],
+                    markPoint: { data: [{ type: 'max', name: 'Max' }, { type: 'min', name: 'Min' }] },
+                    lineStyle: { width: 3 },
+                    symbol: 'arrow',
+                    symbolSize: 10
+                }];
+            
+            let option = {
+                title: { text: 'NTB by Channel', left: 'center', textStyle: { fontSize: 20, fontWeight: 'bold' } },
+                tooltip: { trigger: "axis" },
+                legend: { data: selectedBrand === "All" ? Object.keys(ntbData) : [selectedBrand], left: 10, textStyle: { fontSize: 8 } },
+                xAxis: { type: "category", data: months },
+                yAxis: { type: "value", name: "NTB" },
+                dataZoom: [
+                    { type: 'inside', start: 0, end: 100 }, 
+                    { type: 'slider', bottom: 0 }, 
+                    { type: 'inside', yAxisIndex: 0, start: 0, end: 100 },
+                    { type: 'slider', yAxisIndex: 0, left: 'right' }
+                ],
+                series: seriesData,
+                animationDuration: 3000
+            };
+            chart.setOption(option, true);
+        }
+
+        updateChart();
+    </script>
+</body>
+</html>

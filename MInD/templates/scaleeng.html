@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Tracking Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ffffff;
+            text-align: center;
+        }
+        .chart-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            justify-content: center;
+            padding: 20px;
+        }
+        .chart {
+            width: 600px;
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <h1>App Tracking (Pan India)</h1>
+    <h2>Scale & Engagement</h2>
+    <div class="chart-container">
+        <div id="downloads" class="chart"></div>
+        <div id="cumulative_downloads" class="chart"></div>
+        <div id="open_rate" class="chart"></div>
+        <div id="positive_ratings" class="chart"></div>
+    </div>
+
+    <script>
+        const data = {
+            months: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+            brands: ['WoW Skin Science', 'Minimalist', 'Pilgrim'],
+            downloads: [[120, 150, 170, 160, 180], [100, 130, 150, 140, 160], [90, 120, 140, 130, 150]],
+            cumulativeDownloads: [[500, 650, 800, 900, 1050], [450, 600, 750, 850, 1000], [400, 550, 700, 800, 950]],
+            openRate: [[30, 35, 40, 38, 42], [25, 30, 34, 32, 36], [20, 26, 30, 28, 32]],
+            positiveRatings: [[40, 50, 60, 55, 65], [35, 45, 55, 50, 60], [30, 40, 50, 45, 55]]
+        };
+
+        function createChart(chartId, title, dataKey) {
+            let chart = echarts.init(document.getElementById(chartId));
+            let option = {
+                title: { text: title, left: 'center', textStyle: { fontSize: 16 } },
+                tooltip: { trigger: 'axis' },
+                legend: { data: data.brands, bottom: 0 },
+                xAxis: { type: 'category', data: data.months },
+                yAxis: { type: 'value' },
+                series: data.brands.map((brand, index) => ({
+                    name: brand,
+                    type: 'line',
+                    data: data[dataKey][index],
+                    smooth: true
+                }))
+            };
+            chart.setOption(option);
+        }
+
+        createChart('downloads', 'Downloads', 'downloads');
+        createChart('cumulative_downloads', 'Cumulative Downloads', 'cumulativeDownloads');
+        createChart('open_rate', 'Open Rate', 'openRate');
+        createChart('positive_ratings', 'Incr. Positive Ratings', 'positiveRatings');
+    </script>
+</body>
+</html>

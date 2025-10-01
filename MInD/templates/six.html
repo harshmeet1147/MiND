@@ -1,0 +1,275 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Health (Web Engagement)</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.0/echarts.min.js"></script>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .filter-container {
+            margin-bottom: 15px;
+            font-size: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .chart-container {
+            width: 90%;
+            height: 80vh;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .dropdown {
+            font-size: 16px;
+            padding: 5px;
+        }
+    </style>
+        <style>
+            .nav-container {
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                z-index: 1000;
+            }
+    
+            .nav-btn {
+                padding: 8px 12px;
+                border: none;
+                background-color: #007bff;
+                color: white;
+                cursor: pointer;
+                border-radius: 5px;
+                font-size: 16px;
+            }
+    
+            .nav-btn:hover {
+                background-color: #0056b3;
+            }
+    
+            .menu-container {
+                position: relative;
+            }
+    
+            .menu-btn {
+                background: none;
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+            }
+    
+            .menu {
+                display: none;
+                position: absolute;
+                top: 30px;
+                left: 0;
+                background: white;
+                border: 1px solid #ccc;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+                border-radius: 5px;
+                padding: 10px;
+            }
+    
+            .menu a {
+                display: block;
+                padding: 5px 10px;
+                text-decoration: none;
+                color: black;
+            }
+    
+            .menu a:hover {
+                background: #f0f0f0;
+            }
+    
+            .show {
+                display: block;
+            }
+        </style>
+        <style>
+            .popup {
+                display: none;
+                position: fixed;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                padding: 20px;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+                z-index: 1000;
+                border-radius: 8px;
+            }
+        
+            .popup-content {
+                position: relative;
+            }
+        
+            .close-btn {
+        position: fixed;
+        top: 0px;
+        right: 10px;
+        cursor: pointer;
+        font-size: 40px;
+        font-weight: bold;
+        color: black;
+        background: none;
+        border: none;
+        outline: none;
+    }
+
+    .close-btn:hover {
+        color: red;
+    }
+        </style>
+</head>
+<body>
+    <div class="logo" style="position: absolute; top: 20px; right: 20px;"><img src="{% static 'mlogo.png' %}" alt="Hive Logo" style="width: 160px; height: auto;"></div>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="history.back()">Back</button>
+        <button class="nav-btn" id="nextPage">Next</button>
+        <button class="nav-btn" id="insightsBtn">Insights</button>
+        <div id="insightsPopup" class="popup">
+            <div class="popup-content">
+                <span class="close-btn" onclick="closePopup()">&times;</span>
+                <p><strong>BuyWOW</strong>: BuyWOW's high ratings suggest a strong user base, but declining new positive ratings and rising critical feedback hint at retention issues. This could stem from service quality gaps or over-reliance on new user acquisition without sustaining experience. Addressing post-purchase experience is key.</p>
+
+                <p><strong>Minimalist</strong>: Minimalist’s niche audience likely drives repeat engagement, but app stickiness may be low if users research more than they buy. If retention isn’t improving, stronger personalization, subscription models, or expert-led content could help deepen commitment.</p>
+
+                <p><strong>Pilgrim</strong>: Pilgrim’s unique formulations attract discovery-driven buyers, but low repeat rates may indicate weak habitual use. If drop-offs are high, better onboarding, product education, or loyalty incentives could be critical for conversion and retention.</p>
+
+            </div>
+        </div>
+    
+        <div class="menu-container">
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
+            <div class="menu" id="navMenu">
+                <a href="four">Web</a>
+                <hr>
+                <a href="seven">App</a>
+                <hr>
+                <a href="a">Amazon</a>
+                <hr>
+                <a href="qcom">Q-Comm</a>
+                
+            </div>
+        </div>
+    </div>
+    <div class="header">Comparison Of Website Engagement Metrics Between Brands</div>
+    <div class="filter-container">
+        <label for="metricSelect">Select Metric:</label>
+        <select id="metricSelect" class="dropdown">
+            <option value="Avg. Visit Duration (seconds)">Avg. Visit Duration (seconds)</option>
+            <option value="Avg. Pages Visited">Avg. Pages Visited</option>
+            <option value="Bounce Rate (in %)">Bounce Rate (in %)</option>
+        </select>
+    </div>
+    
+    <div class="chart-container">
+        <div id="chart" style="width: 100%; height: 100%;"></div>
+    </div>
+
+    <script>
+        var chart = echarts.init(document.getElementById('chart'));
+        var data = {
+            'Avg. Visit Duration (seconds)': {
+                'buywow': [110, 104, 82, 107, 105],
+                'pilgrim': [172, 154, 162, 176, 167],
+                'minimalist': [156, 185, 173, 157, 162]
+            },
+            'Avg. Pages Visited': {
+                'buywow': [1.4, 1.3, 1.6, 1.2, 1.0],
+                'pilgrim': [1.4, 1.7, 1.6, 1.6, 1.8],
+                'minimalist': [1.4, 1.6, 1.2, 1.2, 1.2]
+            },
+            'Bounce Rate (in %)': {
+                'buywow': [50, 32, 34, 35, 42],
+                'pilgrim': [27, 27, 23, 27, 29],
+                'minimalist': [25, 29, 24, 28, 27]
+            }
+        };
+        
+        var months = ["Oct'24", "Nov'24", "Dec'24", "Jan'24", "Feb'24"];
+        
+        function updateChart() {
+            let metric = document.getElementById('metricSelect').value;
+            let series = Object.keys(data[metric]).map(brand => {
+                let values = data[metric][brand];
+                let maxIndex = values.indexOf(Math.max(...values));
+                let minIndex = values.indexOf(Math.min(...values));
+                
+                return {
+                    name: brand,
+                    type: 'line',
+                    data: values,
+                    markPoint: {
+                        data: [
+                            { type: 'max', name: 'Max', symbolSize: 50 },
+                            { type: 'min', name: 'Min', symbolSize: 50 }
+                        ]
+                    }
+                };
+            });
+            
+            let option = {
+                title: { text: metric, left: 'center' },
+                tooltip: { trigger: 'axis' },
+                legend: { bottom: 0, data: Object.keys(data[metric]) },
+                xAxis: { type: 'category', data: months },
+                yAxis: { type: 'value' },
+                series: series
+            };
+            chart.setOption(option, true);
+        }
+
+        document.getElementById('metricSelect').addEventListener('change', updateChart);
+        updateChart();
+        window.addEventListener('resize', () => chart.resize());
+    </script>
+    <script>
+        function toggleMenu() {
+            document.getElementById("navMenu").classList.toggle("show");
+        }
+    
+        // Set the Next button's URL
+        document.getElementById("nextPage").addEventListener("click", function() {
+            window.location.href = "seven"; // Change dynamically per page
+        });
+    
+        // Close menu when clicking outside
+        document.addEventListener("click", function(event) {
+            if (!event.target.closest(".menu-container")) {
+                document.getElementById("navMenu").classList.remove("show");
+            }
+        });
+    
+        // Show Insights Popup
+        document.getElementById("insightsBtn").addEventListener("click", function() {
+            document.getElementById("insightsPopup").style.display = "block";
+        });
+    
+        // Close Insights Popup
+        function closePopup() {
+            document.getElementById("insightsPopup").style.display = "none";
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+
+    <style>
+        .nav-container {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            padding: 8px 12px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .nav-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .menu-container {
+            position: relative;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .menu {
+            display: none;
+            position: absolute;
+            top: 30px;
+            left: 0;
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .menu a {
+            display: block;
+            padding: 5px 10px;
+            text-decoration: none;
+            color: black;
+        }
+
+        .menu a:hover {
+            background: #f0f0f0;
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
+
+<div class="nav-container">
+    <button class="nav-btn" onclick="history.back()">Back</button>
+    <button class="nav-btn" id="nextPage">Next</button>
+
+    <div class="menu-container">
+        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+        <div class="menu" id="navMenu">
+            <a href="four">Brand Health (Web Traffic)</a>
+            <hr>
+            <a href="five">Brand Health (Web Traffic) Channel-Wise</a>
+            <hr>
+            <a href="six">Brand Health (Web Engagement)</a>
+            <hr>
+            <a href="seven">Brand Health (App Traffic)</a>
+            <hr>
+            <a href="eight">Brand Health (App Engagement)</a>
+            <hr>
+            <a href="nine">Brand Health (App Sentiment)</a>
+            <hr>
+            <a href="ten">Playstore App Analysis</a>
+            <hr>
+            <a href="eleven">Social Media (Engagement)</a>
+            <hr>
+            <a href="twelve">Social Media (Sentiment)</a>
+            <hr>
+            <a href="one">L30 Brand-Wise SKU & BSR Distribution</a>
+            <hr>
+            <a href="two">Demand Concentration By Price Bucket</a>
+            <hr>
+            <a href="three">Consolidated Brand Presence By BSR & Price</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleMenu() {
+        document.getElementById("navMenu").classList.toggle("show");
+    }
+
+    // Set the Next button's URL
+    document.getElementById("nextPage").addEventListener("click", function() {
+        window.location.href = "five"; // Change this dynamically per page
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener("click", function(event) {
+        if (!event.target.closest(".menu-container")) {
+            document.getElementById("navMenu").classList.remove("show");
+        }
+    });
+</script>
+

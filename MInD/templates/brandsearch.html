@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revenue (By Channel)</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.0/dist/echarts.min.js"></script>
+    <style>
+        body {
+            background-color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background: white;
+            color: black;
+            padding: 15px;
+            text-align: center;
+            font-size: 30px;
+            font-weight: bold;
+        }
+        .charts-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 40px;
+        }
+        .chart-container {
+            width: 100%;
+            height:480px;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            bottom: 40px;
+            padding: 20px;
+        }
+        select {
+            margin-bottom: 20px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .navigation {
+            position: absolute;
+            width: 100%;
+            bottom: 0px;
+            display: flex;
+            justify-content: center;
+            gap: 70px;
+
+            
+        }
+        .nav-button {
+            font-size: 60px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #007BFF;
+        }
+        .nav-button:hover {
+            color: #0056b3;
+        }
+        
+        
+    </style>
+</head>
+<body>
+    <div class="header">Revenue (By Channel)</div>
+
+    <div class="charts-wrapper">
+        <select id="brandSelect" onchange="updateChart()" style="font-size: 14px; padding: 5px; width: 150px;margin-bottom: 60px;">
+            <option value="All">All</option>
+            <option value="Amazon">Amazon</option>
+            <option value="Flipkart">Flipkart</option>
+            <option value="Blinkit">Blinkit</option>
+            <option value="Zepto">Zepto</option>
+            <option value="Swiggy">Swiggy</option>
+            <option value="App">App</option>
+            <option value="Web">Web</option>
+        </select>
+        <div id="chart" class="chart-container"></div>
+        <div class="navigation">
+            <button class="nav-button" onclick="goBack()">&#8592;</button>
+            <button class="nav-button" onclick="goNext()">&#8594;</button>
+        </div>
+       
+    </div>
+    
+    <script>
+        let revenueData = {
+            "Amazon":  [
+    32497325, 32976348, 31572431, 31917483, 44576776, 31912151, 
+    39254058, 42505971, 41584892, 32487566, 42768026, 43898332
+],
+            "Flipkart":numbers = [
+    92887523, 83352241, 87836982, 87112964, 75495660, 85001875, 
+    87338948, 73065643, 92722278, 76906171, 88604374, 70343049
+]
+,
+            "Blinkit": numbers = [
+    19673461, 22720711, 22721338, 18605162, 17266981, 19427296, 
+    16103575, 11718580, 18294897, 18483050, 23306544, 12314696
+]
+,
+            "Zepto": numbers = [
+    6341253, 8449977, 8600223, 6935823, 7482067, 7046144, 
+    8221636, 8444839, 6068940, 8465160, 8584872, 7794729
+]
+,
+            "Swiggy": numbers = [
+    8203899, 7114018, 8474347, 8352045, 6282121, 7253141, 
+    8788332, 8392408, 7248454, 6891478, 7798263, 7486802
+]
+,
+            "App": numbers = [
+    371503, 309097, 379808, 373189, 368392, 356128, 
+    389135, 377342, 318362, 359409, 372540, 380432
+]
+,
+            "Web": numbers = [
+    849743, 807116, 873915, 787573, 779234, 724066, 
+    806379, 893368, 889851, 844437, 817038, 717018
+]
+
+        };
+        
+        let months = ["Jan'24", "Feb'24", "Mar'24", "Apr'24", "May'24", "Jun'24", "Jul'24", "Aug'24", "Sep'24", "Oct'24", "Nov'24", "Dec'24"];
+        let chart = echarts.init(document.getElementById('chart'));
+
+        function updateChart() {
+            let selectedBrand = document.getElementById("brandSelect").value;
+            let seriesData = selectedBrand === "All" ? 
+                Object.keys(revenueData).map(brand => ({
+                    name: brand,
+                    type: "line",
+                    smooth: true,
+                    data: revenueData[brand],
+                    markPoint: { data: [{ type: 'max', name: 'Max' }, { type: 'min', name: 'Min' }] },
+                    lineStyle: { width: 3 },
+                    symbol: 'arrow',
+                    symbolSize: 10
+                })) : [{
+                    name: selectedBrand,
+                    type: "line",
+                    smooth: true,
+                    data: revenueData[selectedBrand],
+                    markPoint: { data: [{ type: 'max', name: 'Max' }, { type: 'min', name: 'Min' }] },
+                    lineStyle: { width: 3 },
+                    symbol: 'arrow',
+                    symbolSize: 10
+                }];
+            
+            let selectedData = selectedBrand === "All" 
+                ? Object.values(revenueData).flat()
+                : revenueData[selectedBrand];
+            
+            let avgValue = selectedData.length > 0 
+                ? (selectedData.reduce((sum, val) => sum + val, 0) / selectedData.length).toFixed(2) 
+                : 0;
+            
+            let option = {
+                title: {
+                    text: 'Revenue by Channel',
+                    subtext: `Average Revenue: ${avgValue}`,
+                    left: 'center',
+                    textStyle: { fontSize: 20, fontWeight: 'bold' },
+                    subtextStyle: { fontSize: 10, fontWeight: 'bold', color: '#333' }
+                },
+                tooltip: { trigger: "axis" },
+                legend: { data: selectedBrand === "All" ? Object.keys(revenueData) : [selectedBrand], left: 10,textStyle: { fontSize: 8 }  },
+                xAxis: { type: "category", data: months },
+                yAxis: { type: "value", name: "Revenue" },
+                dataZoom: [{ type: 'inside', start: 0, end: 100 }, { type: 'slider', bottom: 0 }],
+                series: seriesData,
+                animationDuration: 3000
+            };
+            chart.setOption(option, true);
+        }
+
+        updateChart();
+        function goBack() {
+            window.history.back();
+        }
+    
+        function goNext() {
+            window.location.href = 'buzz';
+        }
+        
+    </script>
+</body>
+</html>

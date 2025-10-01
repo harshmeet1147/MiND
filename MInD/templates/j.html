@@ -1,0 +1,413 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revenue Impact of Words</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .header {
+            text-align: center;
+            padding: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            /* background-color: #4CAF50; */
+            color: black;
+            border-radius: 5px;
+        }
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+        .chart-container {
+            width: 75%;
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .chart {
+            width: 100%;
+            height: 800px;
+        }
+        .table-container {
+            width: 25%;
+            max-height: 800px;
+            overflow-y: auto;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            cursor: pointer;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            transition: background 0.3s;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        tbody tr {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+    </style>
+    <style>
+        .nav-container {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            padding: 8px 12px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .nav-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .menu-container {
+            position: relative;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .menu {
+            display: none;
+            position: absolute;
+            top: 30px;
+            left: 0;
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .menu a {
+            display: block;
+            padding: 5px 10px;
+            text-decoration: none;
+            color: black;
+        }
+
+        .menu a:hover {
+            background: #f0f0f0;
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo" style="position: absolute; top: 20px; right: 20px;"><img src="{% static 'mlogo.png' %}" alt="Hive Logo" style="width: 160px; height: auto;"></div>
+    <div class="header">Revenue Impact Of Words In Product Title</div>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="history.back()">Back</button>
+        <button class="nav-btn" id="nextPage">Next</button>
+    
+        <div class="menu-container">
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
+            <div class="menu" id="navMenu">
+                <a href="four">Web</a>
+                <hr>
+                <a href="seven">App</a>
+                <hr>
+                <a href="a">Amazon</a>
+                <hr>
+                <a href="qcom">Q-Comm</a>
+                
+            </div>
+        </div>
+    </div>
+    <div class="controls">
+        <label for="category"><b>Category:</b></label>
+        <select id="category">
+            <!-- <option>Water Purifier</option> -->
+        </select>
+    </div>
+    <div class="container">
+        <div class="chart-container">
+            <div id="treemap" class="chart"></div>
+        </div>
+        <div class="table-container">
+            <table id="data-table">
+                <thead>
+                    <tr><th>Words</th><th>ASIN Count</th><th>Revenue (%)</th></tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let originalData = []; // Store the raw data from CSV
+        let originalTreeData = [];
+        let chart;
+    
+        // Load the CSV file and parse it
+        function loadCSV() {
+            fetch("/static/data/j1.csv")
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok.");
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    // Use PapaParse to parse CSV data
+                    Papa.parse(data, {
+                        header: true,
+                        skipEmptyLines: true,
+                        complete: function (results) {
+                            if (results.errors.length > 0) {
+                                console.error("Error parsing CSV:", results.errors);
+                                return;
+                            }
+                            originalData = results.data;
+                            if (originalData.length === 0) {
+                                console.error("No data found in the CSV file.");
+                                return;
+                            }
+                            console.log("CSV data:", originalData);
+                            populateCategoryDropdown();
+                            processData(); // Process data after loading CSV
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error("Error loading CSV file:", error);
+                });
+        }
+    
+        // Populate the category dropdown based on unique categories from the CSV data
+        function populateCategoryDropdown() {
+    const categorySelect = document.getElementById("category");
+
+    // Trim and filter to ensure we don't get empty or undefined categories
+    const categories = [...new Set(originalData.map(row => row.category ? row.category.trim() : "").filter(Boolean))];
+
+    if (categories.length === 0) {
+        console.warn("No valid categories found in the CSV file.");
+        return;
+    }
+
+    categorySelect.innerHTML = categories.map(category =>
+        `<option value="${category}">${category}</option>`
+    ).join("");
+
+    if (categories.length === 1) {
+        categorySelect.value = categories[0]; // Automatically select the only category if one exists
+    }
+
+    categorySelect.addEventListener("change", processData); // Reprocess data on category change
+}
+
+    
+        // Process the data based on the selected category
+        function processData() {
+            const selectedCategory = document.getElementById("category").value;
+    
+            if (!selectedCategory) {
+                console.warn("No category selected.");
+                return;
+            }
+    
+            // Filter data based on selected category
+            const filteredData = originalData.filter(row => row.category && row.category.trim() === selectedCategory);
+    
+            if (filteredData.length === 0) {
+                console.warn(`No data found for category: ${selectedCategory}`);
+                return;
+            }
+    
+            let groupedData = {};
+    
+            filteredData.forEach(row => {
+                let word = row.Words?.trim();
+                let asin = row.asin?.trim();
+                let revenue = parseFloat(row.revenue);
+    
+                if (!word || !asin || isNaN(revenue)) {
+                    console.warn("Missing or invalid data:", row);
+                    return;
+                }
+    
+                if (!groupedData[word]) {
+                    groupedData[word] = { revenue: 0, asins: {} };
+                }
+    
+                groupedData[word].revenue += revenue;
+                groupedData[word].asins[asin] = (groupedData[word].asins[asin] || 0) + revenue;
+            });
+    
+            let totalRevenue = Object.values(groupedData).reduce((sum, d) => sum + d.revenue, 0);
+            let sortedData = Object.entries(groupedData)
+                .map(([word, info]) => ({
+                    word,
+                    revenue: info.revenue,
+                    asinCount: Object.keys(info.asins).length,
+                    asins: Object.entries(info.asins).map(([asin, rev]) => ({ asin, revenue: rev }))
+                }))
+                .sort((a, b) => b.revenue - a.revenue)
+                .slice(0, 100); // Limit to top 100 words
+    
+            originalTreeData = sortedData.map(entry => ({
+                name: entry.word,
+                value: entry.revenue,
+                children: entry.asins.map(asinData => ({
+                    name: asinData.asin,
+                    value: asinData.revenue,
+                    asin: asinData.asin
+                }))
+            }));
+    
+            if (sortedData.length === 0) {
+                console.warn("No data to display after processing.");
+                return;
+            }
+    
+            // Update table with the sorted data
+            document.querySelector("#data-table tbody").innerHTML = sortedData.map(entry =>
+                `<tr data-word="${entry.word}">
+                    <td>${entry.word}</td>
+                    <td>${entry.asinCount}</td>
+                    <td>${((entry.revenue / totalRevenue) * 100).toFixed(2)}%</td>
+                </tr>`
+            ).join("");
+    
+            addTableClickListener();
+            renderChart(originalTreeData); // Render the updated chart
+        }
+    
+        // Format currency as INR
+        function formatCurrencyINR(amount) {
+            return new Intl.NumberFormat("en-IN", {
+                style: "currency",
+                currency: "INR",
+                maximumFractionDigits: 0
+            }).format(amount);
+        }
+    
+        // Render the treemap chart
+        function renderChart(treeData) {
+            if (!treeData || treeData.length === 0) {
+                console.error("No data to render in the chart.");
+                return;
+            }
+    
+            chart = echarts.init(document.getElementById("treemap"));
+            chart.setOption({
+                title: { text: "Impact Of Words On Revenue", left: "center" },
+                tooltip: {
+                    formatter: params => params.data.asin
+                        ? `<strong>ASIN:</strong> ${params.data.asin}<br><strong>Revenue:</strong> ${formatCurrencyINR(params.data.value)}`
+                        : `<strong>Word:</strong> ${params.name}<br><strong>Total Revenue:</strong> ${formatCurrencyINR(params.value)}`
+                },
+                series: [{
+                    type: "treemap",
+                    data: treeData,
+                    label: {
+                        show: false,
+                    },
+                    upperLabel: {
+                        show: true,
+                        height: 30,
+                        fontSize: 16,
+                        fontWeight: "bold",
+                        color: "#000"
+                    },
+                    breadcrumb: { show: false }
+                }]
+            });
+        }
+    
+        // Add event listener to table rows for filtering the treemap
+        function addTableClickListener() {
+            document.querySelectorAll("#data-table tbody tr").forEach(row => {
+                row.addEventListener("click", function () {
+                    let word = this.getAttribute("data-word");
+                    filterTreemap(word);
+                });
+            });
+        }
+    
+        // Filter the treemap by a selected word from the table
+        function filterTreemap(word) {
+            let filteredData = originalTreeData.filter(d => d.name === word);
+            renderChart(filteredData.length ? filteredData : originalTreeData);
+        }
+    
+        // Call the loadCSV function to start the process
+        loadCSV();
+    </script>
+    
+    
+
+
+    
+    <script>
+        function toggleMenu() {
+            document.getElementById("navMenu").classList.toggle("show");
+        }
+    
+        // Set the Next button's URL
+        document.getElementById("nextPage").addEventListener("click", function() {
+            window.location.href = "a6"; // Change this dynamically per page
+        });
+    
+        // Close menu when clicking outside
+        document.addEventListener("click", function(event) {
+            if (!event.target.closest(".menu-container")) {
+                document.getElementById("navMenu").classList.remove("show");
+            }
+        });
+    </script>
+</body>
+</html>

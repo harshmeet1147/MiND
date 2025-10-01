@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Sentiment</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+        #chart {
+            width: 1300px;
+            height: 600px;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 0px 0px rgba(0, 0, 0, 0.15);
+            padding: 10px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+</head>
+<body>
+    <h1>Volume Trend</h1>
+    <div id="chart"></div>
+
+    <script>
+        fetch("http://127.0.0.1:8000/get_chart_data")
+            .then(response => response.json())
+            .then(data => {
+                let dates = data.map(item => item.Date);
+                let wowSkin = data.map(item => item["WoW Skin Science"]);
+                let minimalist = data.map(item => item["Minimalist"]);
+                let pilgrim = data.map(item => item["Pilgrim"]);
+
+                let chart = echarts.init(document.getElementById('chart'));
+
+                let option = {
+                    title: {
+                        left: 'center',
+                        textStyle: {
+                            fontSize: 20,
+                            fontWeight: 'bold',
+                            color: '#333'
+                        }
+                    },
+                    tooltip: {
+                        trigger: "axis",
+                        backgroundColor: "rgba(50,50,50,0.7)",
+                        textStyle: { color: "#fff" }
+                    },
+                    legend: {
+                        data: ["WoW Skin Science", "Minimalist", "Pilgrim"],
+                        top: 40
+                    },
+                    grid: {
+                        left: '8%',
+                        right: '8%',
+                        bottom: '12%'
+                    },
+                    xAxis: {
+                        type: "category",
+                        data: dates,
+                        axisLabel: { rotate: 45 }
+                    },
+                    yAxis: {
+                        type: "value",
+                        name: "Revenue",
+                        splitLine: { show: true }
+                    },
+                    dataZoom: [
+                        {
+                            type: 'inside',  
+                            start: 0,
+                            end: 100
+                        },
+                        {
+                            type: 'slider',
+                            show: true,
+                            bottom: 0
+                        },
+                        {
+                            type: 'select',  
+                            start: 0,
+                            end: 100
+                        }
+                    ],
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataZoom: { show: true },
+                            restore: { show: true },
+                            saveAsImage: { show: true }
+                        }
+                    },
+                    series: [
+                        {
+                            name: "WoW Skin Science",
+                            type: "line",
+                            data: wowSkin,
+                            smooth: true,
+                            lineStyle: { width: 3 }
+                        },
+                        {
+                            name: "Minimalist",
+                            type: "line",
+                            data: minimalist,
+                            smooth: true,
+                            lineStyle: { width: 3 }
+                        },
+                        {
+                            name: "Pilgrim",
+                            type: "line",
+                            data: pilgrim,
+                            smooth: true,
+                            lineStyle: { width: 3 }
+                        }
+                    ],
+                    animationDuration: 3000
+                };
+
+                chart.setOption(option);
+            })
+            .catch(error => console.error("Error fetching chart data:", error));
+    </script>
+</body>
+</html>

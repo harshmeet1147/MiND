@@ -1,0 +1,121 @@
+Date,Channel,NTB,City,State,Brand
+2024-11-01,Retail,532,Mumbai,Maharashtra,lenskart
+2024-11-01,Store,210,Delhi,Delhi,muscleblaze
+2024-11-02,Web,345,Bangalore,Karnataka,wow
+2024-11-02,App,678,Chennai,Tamil Nadu,livguard
+2024-11-03,Retail,123,Kolkata,West Bengal,centre for sight
+2024-11-03,Store,456,Hyderabad,Telangana,Bandhan
+2024-11-04,Web,789,Pune,Maharashtra,Credila
+2024-11-04,App,234,Ahmedabad,Gujarat,Safex
+2024-11-05,Retail,567,Surat,Gujarat,lenskart
+2024-11-05,Store,890,Jaipur,Rajasthan,muscleblaze
+2024-11-06,Web,321,Lucknow,Uttar Pradesh,wow
+2024-11-06,App,654,Mumbai,Maharashtra,livguard
+2024-11-07,Retail,987,Delhi,Delhi,centre for sight
+2024-11-07,Store,432,Bangalore,Karnataka,Bandhan
+2024-11-08,Web,213,Chennai,Tamil Nadu,Credila
+2024-11-08,App,546,Kolkata,West Bengal,Safex
+2024-11-09,Retail,879,Hyderabad,Telangana,lenskart
+2024-11-09,Store,312,Pune,Maharashtra,muscleblaze
+2024-11-10,Web,645,Ahmedabad,Gujarat,wow
+2024-11-10,App,978,Surat,Gujarat,livguard
+2024-11-11,Retail,210,Jaipur,Rajasthan,centre for sight
+2024-11-11,Store,543,Lucknow,Uttar Pradesh,Bandhan
+2024-11-12,Web,876,Mumbai,Maharashtra,Credila
+2024-11-12,App,109,Delhi,Delhi,Safex
+2024-11-13,Retail,432,Bangalore,Karnataka,lenskart
+2024-11-13,Store,765,Chennai,Tamil Nadu,muscleblaze
+2024-11-14,Web,198,Kolkata,West Bengal,wow
+2024-11-14,App,567,Hyderabad,Telangana,livguard
+2024-11-15,Retail,890,Pune,Maharashtra,centre for sight
+2024-11-15,Store,345,Ahmedabad,Gujarat,Bandhan
+2024-11-16,Web,678,Surat,Gujarat,Credila
+2024-11-16,App,234,Jaipur,Rajasthan,Safex
+2024-11-17,Retail,567,Lucknow,Uttar Pradesh,lenskart
+2024-11-17,Store,890,Mumbai,Maharashtra,muscleblaze
+2024-11-18,Web,123,Delhi,Delhi,wow
+2024-11-18,App,456,Bangalore,Karnataka,livguard
+2024-11-19,Retail,789,Chennai,Tamil Nadu,centre for sight
+2024-11-19,Store,234,Kolkata,West Bengal,Bandhan
+2024-11-20,Web,567,Hyderabad,Telangana,Credila
+2024-11-20,App,890,Pune,Maharashtra,Safex
+2024-12-01,Retail,321,Ahmedabad,Gujarat,lenskart
+2024-12-01,Store,654,Surat,Gujarat,muscleblaze
+2024-12-02,Web,987,Jaipur,Rajasthan,wow
+2024-12-02,App,432,Lucknow,Uttar Pradesh,livguard
+2024-12-03,Retail,213,Mumbai,Maharashtra,centre for sight
+2024-12-03,Store,546,Delhi,Delhi,Bandhan
+2024-12-04,Web,879,Bangalore,Karnataka,Credila
+2024-12-04,App,312,Chennai,Tamil Nadu,Safex
+2024-12-05,Retail,645,Kolkata,West Bengal,lenskart
+2024-12-05,Store,978,Hyderabad,Telangana,muscleblaze
+2024-12-06,Web,210,Pune,Maharashtra,wow
+2024-12-06,App,543,Ahmedabad,Gujarat,livguard
+2024-12-07,Retail,876,Surat,Gujarat,centre for sight
+2024-12-07,Store,109,Jaipur,Rajasthan,Bandhan
+2024-12-08,Web,432,Lucknow,Uttar Pradesh,Credila
+2024-12-08,App,765,Mumbai,Maharashtra,Safex
+2024-12-09,Retail,198,Delhi,Delhi,lenskart
+2024-12-09,Store,567,Bangalore,Karnataka,muscleblaze
+2024-12-10,Web,890,Chennai,Tamil Nadu,wow
+2024-12-10,App,345,Kolkata,West Bengal,livguard
+2024-12-11,Retail,678,Hyderabad,Telangana,centre for sight
+2024-12-11,Store,234,Pune,Maharashtra,Bandhan
+2024-12-12,Web,567,Ahmedabad,Gujarat,Credila
+2024-12-12,App,890,Surat,Gujarat,Safex
+2024-12-13,Retail,123,Jaipur,Rajasthan,lenskart
+2024-12-13,Store,456,Lucknow,Uttar Pradesh,muscleblaze
+2024-12-14,Web,789,Mumbai,Maharashtra,wow
+2024-12-14,App,234,Delhi,Delhi,livguard
+2024-12-15,Retail,567,Bangalore,Karnataka,centre for sight
+2024-12-15,Store,890,Chennai,Tamil Nadu,Bandhan
+2024-12-16,Web,345,Kolkata,West Bengal,Credila
+2024-12-16,App,678,Hyderabad,Telangana,Safex
+2024-12-17,Retail,234,Pune,Maharashtra,lenskart
+2024-12-17,Store,567,Ahmedabad,Gujarat,muscleblaze
+2024-12-18,Web,890,Surat,Gujarat,wow
+2024-12-18,App,123,Jaipur,Rajasthan,livguard
+2024-12-19,Retail,456,Lucknow,Uttar Pradesh,centre for sight
+2024-12-19,Store,789,Mumbai,Maharashtra,Bandhan
+2024-12-20,Web,234,Delhi,Delhi,Credila
+2024-12-20,App,567,Bangalore,Karnataka,Safex
+2025-01-01,Retail,890,Chennai,Tamil Nadu,lenskart
+2025-01-01,Store,345,Kolkata,West Bengal,muscleblaze
+2025-01-02,Web,678,Hyderabad,Telangana,wow
+2025-01-02,App,234,Pune,Maharashtra,livguard
+2025-01-03,Retail,567,Ahmedabad,Gujarat,centre for sight
+2025-01-03,Store,890,Surat,Gujarat,Bandhan
+2025-01-04,Web,123,Jaipur,Rajasthan,Credila
+2025-01-04,App,456,Lucknow,Uttar Pradesh,Safex
+2025-01-05,Retail,789,Mumbai,Maharashtra,lenskart
+2025-01-05,Store,234,Delhi,Delhi,muscleblaze
+2025-01-06,Web,567,Bangalore,Karnataka,wow
+2025-01-06,App,890,Chennai,Tamil Nadu,livguard
+2025-01-07,Retail,345,Kolkata,West Bengal,centre for sight
+2025-01-07,Store,678,Hyderabad,Telangana,Bandhan
+2025-01-08,Web,234,Pune,Maharashtra,Credila
+2025-01-08,App,567,Ahmedabad,Gujarat,Safex
+2025-01-09,Retail,890,Surat,Gujarat,lenskart
+2025-01-09,Store,123,Jaipur,Rajasthan,muscleblaze
+2025-01-10,Web,456,Lucknow,Uttar Pradesh,wow
+2025-01-10,App,789,Mumbai,Maharashtra,livguard
+2025-01-11,Retail,234,Delhi,Delhi,centre for sight
+2025-01-11,Store,567,Bangalore,Karnataka,Bandhan
+2025-01-12,Web,890,Chennai,Tamil Nadu,Credila
+2025-01-12,App,345,Kolkata,West Bengal,Safex
+2025-01-13,Retail,678,Hyderabad,Telangana,lenskart
+2025-01-13,Store,234,Pune,Maharashtra,muscleblaze
+2025-01-14,Web,567,Ahmedabad,Gujarat,wow
+2025-01-14,App,890,Surat,Gujarat,livguard
+2025-01-15,Retail,123,Jaipur,Rajasthan,centre for sight
+2025-01-15,Store,456,Lucknow,Uttar Pradesh,Bandhan
+2025-01-16,Web,789,Mumbai,Maharashtra,Credila
+2025-01-16,App,234,Delhi,Delhi,Safex
+2025-01-17,Retail,567,Bangalore,Karnataka,lenskart
+2025-01-17,Store,890,Chennai,Tamil Nadu,muscleblaze
+2025-01-18,Web,345,Kolkata,West Bengal,wow
+2025-01-18,App,678,Hyderabad,Telangana,livguard
+2025-01-19,Retail,234,Pune,Maharashtra,centre for sight
+2025-01-19,Store,567,Ahmedabad,Gujarat,Bandhan
+2025-01-20,Web,890,Surat,Gujarat,Credila
+2025-01-20,App,123,Jaipur,Rajasthan,Safex

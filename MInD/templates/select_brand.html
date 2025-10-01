@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Brand</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Open Sans', Arial, sans-serif;
+            background: linear-gradient(135deg, #eef1f5 0%, #ffffff 100%);
+            color: #333;
+        }
+        .container {
+            width: 1000px;
+            margin: 40px auto;
+            text-align: center;
+        }
+        h1 {
+            font-size: 3em;
+            color: #4a90e2;
+            margin-bottom: 60px;
+        }
+        .brand-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 200px);
+            grid-template-rows: repeat(2, 120px);
+            gap: 20px;
+            justify-content: center;
+        }
+        .brand-card {
+            background-color: #fff;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        .brand-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .brand-card img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Select Brand</h1>
+        <div class="brand-grid">
+            <div class="brand-card">
+                <a href="http://52.8.27.80:8000/MInD/a">
+                    <img src="{% static 'Wow.jpg' %}" alt="WOW Skin Science">
+                </a>
+            </div>
+            <div class="brand-card">
+                <a href="http://52.8.27.80:8000/MInD/a">
+                <!-- <a href="{% url 'four' %}"> -->
+                    <img src="{% static 'Lenskart.png' %}" alt="Lenskart">
+                </a>
+            </div>
+            <div class="brand-card">
+                <a href="http://52.8.27.80:8000/MInD/a"></a>
+                <!-- <a href="{% url 'four' %}"> -->
+                    <img src="{% static 'Mb-Logo.png' %}" alt="MuscleBlaze">
+                </a>
+            </div>
+           
+            <div class="brand-card">
+                <!-- <a href="{% url 'four' %}"> -->
+                    <a href="http://52.8.27.80:8000/MInD/a"></a>
+                    <img src="{% static 'livguard.png' %}" alt="Livguard">
+                </a>
+            </div>
+            <div class="brand-card">
+                <!-- <a href="{% url 'four' %}"> -->
+                    <a href="http://52.8.27.80:8000/MInD/a"></a>
+                    <img src="{% static 'cfs-logo.jpg.webp' %}" alt="Centre for Sight">
+                </a>
+            </div>
+            <div class="brand-card">
+                <!-- <a href="{% url 'four' %}"> -->
+                    <img src="{% static 'bandhan.jpg' %}" alt="Bandhan Mutual Fund">
+                </a>
+            </div>
+            <div class="brand-card">
+                <!-- <a href="{% url 'four' %}"> -->
+                    <a href="http://52.8.27.80:8000/MInD/a"></a>
+                    <img src="{% static 'credila.png' %}" alt="Credila">
+                </a>
+            </div>
+            <div class="brand-card">
+                <!-- <a href="{% url 'brand_summary' %}"> -->
+                    <a href="http://52.8.27.80:8000/MInD/a"></a>
+                    <img src="{% static 'safex.jpg' %}" alt="Safex">
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
