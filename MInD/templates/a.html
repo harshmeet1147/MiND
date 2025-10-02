@@ -206,8 +206,77 @@
     renderCharts();
     renderTable();
 }
-    
-function renderCharts() {
+
+    function renderCharts() {
+        const revenueChart = echarts.init(document.getElementById("revenue-share"));
+        const unitChart = echarts.init(document.getElementById("units-sold-share"));
+
+        const allBrands = Array.from(new Set([
+            ...revenueData.map(d => d.name),
+            ...unitData.map(d => d.name)
+        ]));
+
+        // A new, vibrant, and distinct color palette
+        const colorPalette = ['#5470C6', '#91CC75', '#FAC858', '#EE6666', '#73C0DE', '#3BA272', '#FC8452', '#9A60B4'];
+
+        const brandColorMap = Object.fromEntries(
+            allBrands.map((brand, index) => [brand, colorPalette[index % colorPalette.length]])
+        );
+
+        const applyColors = (data) => data.map(d => ({
+            ...d,
+            itemStyle: { color: brandColorMap[d.name] || '#ccc' } // 'Others' gets a default grey
+        }));
+
+        function prepareTop5Data(data) {
+            const sorted = [...data].sort((a, b) => b.value - a.value);
+            const top5 = sorted.slice(0, 5);
+            const others = sorted.slice(5);
+            const othersValue = others.reduce((sum, d) => sum + d.value, 0);
+            if (othersValue > 0) {
+                top5.push({ name: 'Others', value: othersValue });
+            }
+            return top5;
+        }
+
+        const option = (title, data) => ({
+            title: { text: title, textStyle: { fontSize: 16, fontWeight: 'bold' } },
+            tooltip: {
+                trigger: 'item',
+                formatter: function (params) {
+                    return `${params.name}: ${params.value.toFixed(2)} (${params.percent.toFixed(2)}%)`;
+                }
+            },
+            toolbox: { feature: { saveAsImage: {}, restore: {} } },
+            legend: { bottom: 0 },
+            series: [{
+                type: 'pie',
+                radius: ['40%', '70%'],
+                label: {
+                    show: true,
+                    formatter: function (params) {
+                        return `${params.name}\n (${params.percent.toFixed(0)}%)`;
+                    }
+                },
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                },
+                data: applyColors(data)
+            }]
+        });
+
+        const topRevenue = prepareTop5Data(revenueData);
+        const topUnits = prepareTop5Data(unitData);
+
+        revenueChart.setOption(option("Revenue Share (%) by Brand", topRevenue));
+        unitChart.setOption(option("Unit Sold Share (%) by Brand", topUnits));
+    }
+
+{% comment %} function renderCharts() {
     const revenueChart = echarts.init(document.getElementById("revenue-share"));
     const unitChart = echarts.init(document.getElementById("units-sold-share"));
 
@@ -216,10 +285,24 @@ function renderCharts() {
         ...unitData.map(d => d.name)
     ]));
 
+    /*
     function generateColor(index, total) {
         const goldenRatio = 0.61803398875;
         let hue = (index / total + goldenRatio) % 1;
         return `hsl(${hue * 360}, 70%, 50%)`;
+    }
+    */
+
+    function generateColor(index, total) {
+        const baseHue = 174; // Corresponds to the theme's teal color
+        const saturation = 65;
+        // Go from a lighter shade to a darker one.
+        const startLightness = 80;
+        const endLightness = 30;
+        const lightnessRange = startLightness - endLightness;
+        const lightnessStep = total > 1 ? lightnessRange / (total - 1) : 0;
+        const lightness = startLightness - (index * lightnessStep);
+        return `hsl(${baseHue}, ${saturation}%, ${lightness}%)`;
     }
 
     const brandColorMap = Object.fromEntries(
@@ -233,8 +316,8 @@ function renderCharts() {
 
     function prepareTop10Data(data) {
         const sorted = [...data].sort((a, b) => b.value - a.value);
-        const top10 = sorted.slice(0, 10);
-        const others = sorted.slice(10);
+        const top10 = sorted.slice(0, 5);
+        const others = sorted.slice(5);
         const othersValue = others.reduce((sum, d) => sum + d.value, 0);
         if (othersValue > 0) {
             top10.push({ name: 'Others', value: othersValue });
@@ -277,11 +360,11 @@ function renderCharts() {
 
     revenueChart.setOption(option("Revenue Share (%) by Brand", topRevenue));
     unitChart.setOption(option("Unit Sold Share (%) by Brand", topUnits));
-}
+} {% endcomment %}
 
 
     
-        function renderTable() {
+        {% comment %} function renderTable() {
             const tbody = document.getElementById("data-table");
             tbody.innerHTML = "";
     
@@ -298,7 +381,42 @@ function renderCharts() {
     
             tbody.innerHTML = rows;
         }
-    
+     {% endcomment %}
+        function renderTable() {
+            const tbody = document.getElementById("data-table");
+            tbody.innerHTML = "";
+
+            // Calculate totals first
+            const totalUnits = marketData.reduce((sum, row) => sum + row.Units, 0);
+            const totalRevenue = marketData.reduce((sum, row) => sum + row.Revenue, 0);
+            const totalAOV = totalUnits > 0 ? totalRevenue / totalUnits : 0;
+
+            // Generate rows for each brand
+            const rows = marketData.map(row => `
+                <tr>
+                    <td>${row.Brand}</td>
+                    <td>${Number(row.Units).toLocaleString('en-IN')}</td>
+                    <td>₹${Number(row.Revenue).toLocaleString('en-IN')}</td>
+                    <td>${row.AOV}</td>
+                    <td>${row.unitsoldshare}</td>
+                    <td>${row.revenueshare}</td>
+                </tr>
+            `).join("");
+
+            // Create the total row HTML
+            const totalRow = `
+                <tr>
+                    <td><strong>Total</strong></td>
+                    <td><strong>${totalUnits.toLocaleString('en-IN')}</strong></td>
+                    <td><strong>₹${totalRevenue.toLocaleString('en-IN')}</strong></td>
+                    <td><strong>₹${Math.round(totalAOV).toLocaleString('en-IN')}</strong></td>
+                    <td><strong>100%</strong></td>
+                    <td><strong>100%</strong></td>
+                </tr> `;
+
+        // Combine the brand rows and the total row
+        tbody.innerHTML = rows + totalRow;
+    }
         // Load data from Django view
         fetchMarketData("http://localhost:8000/MInD/heliumdata_a");
     </script>
