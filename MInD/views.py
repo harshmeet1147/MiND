@@ -154,8 +154,8 @@ import numpy as np
 from django.http import JsonResponse
 
 def oneData(request):
-    # filePath = r"C:\Users\Administrator\Desktop\mindv3-20250706T051847Z-1-001\mindv3\OngoingProjects\MInD\helium_data1.xlsx"
-    filePath = r"C:\Users\Harshmeet\Desktop\mindv3\OngoingProjects\MInD\helium_data1.xlsx"
+    filePath = r"C:\Users\Administrator\Desktop\mindv3new\MiND\helium_data1.xlsx"
+    # filePath = r"C:\Users\Harshmeet\Desktop\mindv3\OngoingProjects\MInD\helium_data1.xlsx"
     
     # Read Excel
     df = pd.read_excel(filePath)
